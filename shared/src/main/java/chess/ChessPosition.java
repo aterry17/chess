@@ -6,7 +6,7 @@ import java.util.Objects;
  * Represents a single square position on a chess board
  * <p>
  * Note: You can add to this class, but you may not alter
- * signature of the existing methods.
+ * signature of the existing methods. --> this means that you can't alter the method name and parameter list
  */
 public class ChessPosition {
 
@@ -34,6 +34,8 @@ public class ChessPosition {
     public int getColumn() {
         return col;
     }
+
+
 
     @Override
     public String toString() {
