@@ -1,13 +1,13 @@
 package chess;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.ArrayList;
 
 public interface BishopMovesCalculator extends PieceMovesCalculator{ // extends means that this file is a subinterface of PieceMovesCalculator
 
     default Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ChessPiece piece = board.getPiece(myPosition);
-        Collection<ChessMove> list_of_moves = new Collection<ChessMove>();
+        Collection<ChessMove> list_of_moves = new ArrayList<ChessMove>();
         list_of_moves.add(diag_up_right(myPosition));
 
         return list_of_moves;
@@ -17,12 +17,14 @@ public interface BishopMovesCalculator extends PieceMovesCalculator{ // extends 
         var end_row = currPosition.getRow();
         var end_col = currPosition.getColumn();
         while (!is_position_filled(new ChessPosition(end_row, end_col))){
-            if (!is_position_on_board(new ChessPosition(end_row+1, end_col+1)) {
+            if (!is_position_on_board(new ChessPosition(end_row+1, end_col+1))) {
                 break;
             }
             end_row += 1;
             end_col += 1;
         }
+
+        // add in the capture enemy step
 
         return new ChessMove(currPosition, new ChessPosition(end_row, end_col), null);
     }
