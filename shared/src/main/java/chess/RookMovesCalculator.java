@@ -15,7 +15,7 @@ public class RookMovesCalculator implements PieceMovesCalculator{
     }
 
     @Override
-    public boolean is_position_filled(ChessPosition currPosition) {
+    public boolean is_position_filled(ChessBoard board, ChessPosition currPosition) {
         return false;
     }
 }

@@ -9,12 +9,11 @@ package chess;
 public class ChessBoard {
 
     private ChessPiece[][] squares = new ChessPiece[8][8];
-    public ChessBoard() {
-        
-    }
+    public ChessBoard() {}
 
     /**
      * Adds a chess piece to the chessboard
+     *
      *
      * @param position where to add the piece to
      * @param piece    the piece to add
@@ -43,7 +42,6 @@ public class ChessBoard {
         squares = new ChessPiece[8][8];
         // put all of the pieces on the board here
     }
-
 
 
 
