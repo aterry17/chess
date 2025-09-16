@@ -35,8 +35,7 @@ public interface BishopMovesCalculator extends PieceMovesCalculator{ // extends 
     }
      default boolean is_position_filled(ChessPosition currPosition){
          // find if someone else is in the position
-        boolean b = is_position_on_board(currPosition);
-        if (b == false) {
+        if (! is_position_on_board(currPosition)) {
             throw new RuntimeException("Position is off board");
          }
         return (ChessBoard.squares != null);
