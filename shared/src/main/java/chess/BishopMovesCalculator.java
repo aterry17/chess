@@ -3,9 +3,9 @@ package chess;
 import java.util.Collection;
 import java.util.ArrayList;
 
-public interface BishopMovesCalculator extends PieceMovesCalculator{ // extends means that this file is a subinterface of PieceMovesCalculator
+public class BishopMovesCalculator implements PieceMovesCalculator{ // extends means that this file is a subinterface of PieceMovesCalculator
 
-    default Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ChessPiece piece = board.getPiece(myPosition);
         Collection<ChessMove> list_of_moves = new ArrayList<ChessMove>();
         list_of_moves.add(diag_up_right(myPosition));
@@ -13,7 +13,7 @@ public interface BishopMovesCalculator extends PieceMovesCalculator{ // extends 
         return list_of_moves;
     }
 
-    default ChessMove diag_up_right(ChessPosition currPosition) { // return the position of the move going diagonally up right
+    private ChessMove diag_up_right(ChessPosition currPosition) { // return the position of the move going diagonally up right
         var end_row = currPosition.getRow();
         var end_col = currPosition.getColumn();
         while (!is_position_filled(new ChessPosition(end_row, end_col))){
@@ -29,11 +29,11 @@ public interface BishopMovesCalculator extends PieceMovesCalculator{ // extends 
         return new ChessMove(currPosition, new ChessPosition(end_row, end_col), null);
     }
 
-    default boolean is_position_on_board(ChessPosition currPosition){
+    public boolean is_position_on_board(ChessPosition currPosition){
         // find if position coordinates are on the board
         return !(currPosition.getRow() < 1 || currPosition.getRow() > 8 || currPosition.getColumn() < 1 || currPosition.getColumn() > 8);
     }
-     default boolean is_position_filled(ChessPosition currPosition){
+     public boolean is_position_filled(ChessPosition currPosition){
          // find if someone else is in the position
         if (! is_position_on_board(currPosition)) {
             throw new RuntimeException("Position is off board");
@@ -41,7 +41,7 @@ public interface BishopMovesCalculator extends PieceMovesCalculator{ // extends 
         return (ChessBoard.squares != null);
      }
 
-     default ChessGame.TeamColor get_position_color(ChessPosition currPosition){
+     ChessGame.TeamColor get_position_color(ChessPosition currPosition){
         ChessPiece currPiece = ChessBoard.squares[currPosition.getRow()][currPosition.getColumn()];
         return currPiece.getTeamColor();
      }

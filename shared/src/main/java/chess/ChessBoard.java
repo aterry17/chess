@@ -8,7 +8,7 @@ package chess;
  */
 public class ChessBoard {
 
-    public static ChessPiece[][] squares = new ChessPiece[8][8];
+    private ChessPiece[][] squares = new ChessPiece[8][8];
     public ChessBoard() {
         
     }
@@ -40,8 +40,11 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        ChessBoard.squares = new ChessPiece[8][8];
+        squares = new ChessPiece[8][8];
+        // put all of the pieces on the board here
     }
+
+
 
 
     /// My methods start here:

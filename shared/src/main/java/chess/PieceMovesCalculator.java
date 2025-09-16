@@ -5,10 +5,8 @@ import java.util.List;
 
 public interface PieceMovesCalculator {
 
-    public default Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        ChessPiece piece = board.getPiece(myPosition);
-
-        return List.of();
-    }
+    Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition);
+    boolean is_position_on_board(ChessPosition currPosition); // add body maybe
+    boolean is_position_filled(ChessPosition currPosition);
 
 }
