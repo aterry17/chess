@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -56,12 +57,32 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ChessPiece piece = board.getPiece(myPosition);
 
-        if (piece.getPieceType() == PieceType.BISHOP){
-            return List.of(new ChessMove(new ChessPosition(5, 4), new ChessPosition(1, 8), null));
+        // Below is the TA approved format needed for accessing the PieceMovesMethod from BishopMovesCalculator()
+
+//        PieceMovesCalculator BishopMoves = new BishopMovesCalculator();
+//
+//        BishopMoves.pieceMoves(board, myPosition);
+        // ___________________________________________________________________
+
+
+
+//        if (piece.getPieceType() == PieceType.BISHOP){
+//            return List.of(new ChessMove(new ChessPosition(5, 4), new ChessPosition(1, 8), null));
+//        }
+
+        Collection<ChessMove> list_of_moves = (the_moves_calculator_I_need(piece.getPieceType()).pieceMoves(board, myPosition));
+
+
+        return list_of_moves;
+    }
+
+    public PieceMovesCalculator the_moves_calculator_I_need(ChessPiece.PieceType piece_type) {
+        if (piece_type == PieceType.BISHOP) {
+            return new BishopMovesCalculator();
         }
-
-
-        return List.of();
+        else {
+            throw new RuntimeException("you haven't implemented the other piece types yet :(");
+        }
     }
 
     @Override

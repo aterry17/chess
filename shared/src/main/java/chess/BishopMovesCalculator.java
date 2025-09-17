@@ -25,7 +25,19 @@ public class BishopMovesCalculator implements PieceMovesCalculator{ // extends m
         }
         ChessPosition next_up_position = new ChessPosition(end_row+1, end_col+1);
 
-        if (board.getPiece(startPosition).getTeamColor() != board.getPiece(next_up_position).getTeamColor()){ // checking for enemy color
+        // check that next_up_position is still on the board
+        // then check that there's a piece in next_up_position
+
+        boolean pos_on_board = is_position_on_board(next_up_position);
+
+        boolean piece_in_pos = (board.getPiece(next_up_position) != null);
+        boolean enemy_piece = false;
+
+        if (piece_in_pos) { // here to avoid NullPointerException
+            enemy_piece = (board.getPiece(startPosition).getTeamColor() != board.getPiece(next_up_position).getTeamColor());
+        }
+
+        if (pos_on_board && piece_in_pos && enemy_piece){
             end_row += 1;
             end_col += 1;
         }
@@ -37,16 +49,12 @@ public class BishopMovesCalculator implements PieceMovesCalculator{ // extends m
         // find if position coordinates are on the board
         return !(currPosition.getRow() < 1 || currPosition.getRow() > 8 || currPosition.getColumn() < 1 || currPosition.getColumn() > 8);
     }
-     public boolean is_position_filled(ChessBoard board, ChessPosition currPosition){
+    public boolean is_position_filled(ChessBoard board, ChessPosition currPosition){
          // find if someone else is in the position
         if (! is_position_on_board(currPosition)) {
             throw new RuntimeException("Position is off board");
          }
         return (board.getPiece(currPosition) != null);
-     }
-
-     public ChessGame.TeamColor get_position_color(ChessBoard board, ChessPosition currPosition){
-        return board.getPiece(currPosition).getTeamColor();
      }
 
 
