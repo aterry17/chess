@@ -40,7 +40,46 @@ public class ChessBoard {
      */
     public void resetBoard() {
         squares = new ChessPiece[8][8];
-        // put all of the pieces on the board here
+        var white = ChessGame.TeamColor.WHITE;
+        var black = ChessGame.TeamColor.BLACK;
+        var king = ChessPiece.PieceType.KING;
+        var queen = ChessPiece.PieceType.QUEEN;
+        var bishop = ChessPiece.PieceType.BISHOP;
+        var knight = ChessPiece.PieceType.KNIGHT;
+        var rook = ChessPiece.PieceType.ROOK;
+        var pawn = ChessPiece.PieceType.PAWN;
+
+        // PAWNS
+        for (int i=1; i<=8; i++) {
+            addPiece(new ChessPosition(2, i), new ChessPiece(white, pawn));
+            addPiece(new ChessPosition(7,i), new ChessPiece(black, pawn));
+        }
+
+        // ROOKS
+        addPiece(new ChessPosition(1,1), new ChessPiece(white, rook));
+        addPiece(new ChessPosition(1,8), new ChessPiece(white, rook));
+        addPiece(new ChessPosition(8,1), new ChessPiece(black, rook));
+        addPiece(new ChessPosition(8,8), new ChessPiece(black, rook));
+
+        // KNIGHTS
+        addPiece(new ChessPosition(1,2), new ChessPiece(white, knight));
+        addPiece(new ChessPosition(1,7), new ChessPiece(white, knight));
+        addPiece(new ChessPosition(8,2), new ChessPiece(black, knight));
+        addPiece(new ChessPosition(8,7), new ChessPiece(black, knight));
+
+        // BISHOPS
+        addPiece(new ChessPosition(1,3), new ChessPiece(white, bishop));
+        addPiece(new ChessPosition(1,6), new ChessPiece(white, bishop));
+        addPiece(new ChessPosition(8,3), new ChessPiece(black, bishop));
+        addPiece(new ChessPosition(8,6), new ChessPiece(black, bishop));
+
+        // QUEENS
+        addPiece(new ChessPosition(1,4), new ChessPiece(white, queen));
+        addPiece(new ChessPosition(8,4), new ChessPiece(black, queen));
+
+        //KINGS
+        addPiece(new ChessPosition(1,5), new ChessPiece(white, queen));
+        addPiece(new ChessPosition(8,5), new ChessPiece(black, queen));
     }
 
 
