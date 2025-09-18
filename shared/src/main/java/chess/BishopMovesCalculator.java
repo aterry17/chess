@@ -6,9 +6,7 @@ import java.util.ArrayList;
 public class BishopMovesCalculator implements PieceMovesCalculator{ // extends means that this file is a subinterface of PieceMovesCalculator
 
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition startPosition) {
-        //ChessPiece piece = board.getPiece(myPosition);
         Collection<ChessMove> list_of_moves = new ArrayList<ChessMove>();
-        // list_of_moves.add(diag_up_right(board, myPosition));
 
         var team_color = board.getPiece(startPosition).getTeamColor();
 

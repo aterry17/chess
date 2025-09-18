@@ -80,6 +80,9 @@ public class ChessPiece {
         if (piece_type == PieceType.BISHOP) {
             return new BishopMovesCalculator();
         }
+        else if(piece_type == PieceType.ROOK) {
+            return new RookMovesCalculator();
+        }
         else {
             throw new RuntimeException("you haven't implemented the other piece types yet :(");
         }
