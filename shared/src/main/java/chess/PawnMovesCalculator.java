@@ -24,17 +24,19 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
             list_of_moves.add(new ChessMove(startPosition, new ChessPosition(6, startPosition.getColumn()), null));
         }
         // enemy capture: diag_up_right or diag_up_left
+        // need to check if diag_up_ positions have something in them before trying to use .getPiece --> right now it is returning null and that throws an exception
+
         var diag_up_right_pos = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() + 1);
         var diag_up_left_pos = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() - 1);
-        if (team_color != board.getPiece(diag_up_right_pos).getTeamColor()) {
+        if ((board.getPiece(diag_up_right_pos) != null) && (team_color != board.getPiece(diag_up_right_pos).getTeamColor())) {
             list_of_moves.add(new ChessMove(startPosition, diag_up_right_pos, null));
         }
-        if (team_color != board.getPiece(diag_up_left_pos).getTeamColor()) {
+        if ((board.getPiece(diag_up_left_pos) != null) && (team_color != board.getPiece(diag_up_left_pos).getTeamColor())) {
             list_of_moves.add(new ChessMove(startPosition, diag_up_left_pos, null));
         }
         // promotion: when white pawn reaches row 8 or black pawn reaches row 1, replaced by player's choice of rook, knight, bishop, queen
         // don't know how to do this one yet, so I'll come back here later to fix it
-
+        // probably add the move, but inside the move the promotionPiece shouldn't be null -- it should be the piece type to put in -- how do we take into account the player's choice of piece?
 
         return list_of_moves;
     }
