@@ -55,17 +55,21 @@ public class BishopMovesCalculator implements PieceMovesCalculator{ // extends m
 //        return new ChessMove(startPosition, finalPosition, null);
 //    }
 
-    public boolean is_position_on_board(ChessPosition currPosition){
-        // find if position coordinates are on the board
-        return ((currPosition.getRow() >= 1) && (currPosition.getRow() <= 8) && (currPosition.getColumn() >=1) && (currPosition.getColumn() <= 8));
-    }
-    public boolean is_position_empty(ChessBoard board, ChessPosition currPosition){
-         // find if someone else is in the position
-        if (!is_position_on_board(currPosition)) {
-            throw new RuntimeException("Position is off board");
-         }
-        return (board.getPiece(currPosition) == null);
-     }
+///  commenting these out to see if it works to just have them implemented in piecemovescalculator --> it seems to be working so far
+
+//    public boolean is_position_on_board(ChessPosition currPosition){
+//        // find if position coordinates are on the board
+//        return ((currPosition.getRow() >= 1) && (currPosition.getRow() <= 8) && (currPosition.getColumn() >=1) && (currPosition.getColumn() <= 8));
+//    }
+//    public boolean is_position_empty(ChessBoard board, ChessPosition currPosition){
+//         // find if someone else is in the position
+//        if (!is_position_on_board(currPosition)) {
+//            throw new RuntimeException("Position is off board");
+//         }
+//        return (board.getPiece(currPosition) == null);
+//     }
+
+    //________________________________________________________________________________
 
 //
 //     public ChessPosition capture_enemy_move(ChessBoard board, ChessGame.TeamColor team_color, int curr_row, int curr_col) { // maybe put this in piecemovescalc (but implement it here)
