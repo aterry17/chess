@@ -65,23 +65,19 @@ public class ChessPiece {
         // ___________________________________________________________________
 
 
-
-//        if (piece.getPieceType() == PieceType.BISHOP){
-//            return List.of(new ChessMove(new ChessPosition(5, 4), new ChessPosition(1, 8), null));
-//        }
-
         Collection<ChessMove> list_of_moves = (the_moves_calculator_I_need(piece.getPieceType()).pieceMoves(board, myPosition));
-
-
         return list_of_moves;
     }
 
     public PieceMovesCalculator the_moves_calculator_I_need(ChessPiece.PieceType piece_type) {
-        if (piece_type == PieceType.BISHOP) {
+        if(piece_type == PieceType.BISHOP) {
             return new BishopMovesCalculator();
         }
         else if(piece_type == PieceType.ROOK) {
             return new RookMovesCalculator();
+        }
+        else if(piece_type == PieceType.PAWN) {
+            return new PawnMovesCalculator();
         }
         else {
             throw new RuntimeException("you haven't implemented the other piece types yet :(");
