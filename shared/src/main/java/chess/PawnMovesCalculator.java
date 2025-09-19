@@ -5,76 +5,71 @@ import java.util.Collection;
 
 public class PawnMovesCalculator implements PieceMovesCalculator {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition startPosition) {
-        Collection<ChessMove> list_of_moves = new ArrayList<ChessMove>();
+//        Collection<ChessMove> list_of_moves = new ArrayList<ChessMove>();
 
         var team_color = board.getPiece(startPosition).getTeamColor();
+        ChessPosition one_up_position = null;
+        ChessPosition two_up_position = null;
+        ChessPosition capture_left_position = null;
+        ChessPosition capture_right_position = null;
+        int team_start_row = 0;
 
-        int[][] white_enemy_capture_directions = {{1, 1}, {1, -1}};
-        int[][] black_enemy_capture_directions = {{-1, -1}, {-1, 1}};
+        // starting fresh here --> trying to mimic the format from the KingMovesCalculator --> okay actually that's not what we're doing
 
-        // starting fresh here
+        // White Moves:
+        if(team_color == ChessGame.TeamColor.WHITE) {
+            one_up_position = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn());
+            two_up_position = new ChessPosition(startPosition.getRow() + 2, startPosition.getColumn());
+            capture_left_position = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() - 1);
+            capture_right_position = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() + 1);
+            team_start_row = 2;
+        }
+        else if(team_color == ChessGame.TeamColor.BLACK) {
+            one_up_position = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn());
+            two_up_position = new ChessPosition(startPosition.getRow() - 2, startPosition.getColumn());
+            capture_left_position = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn() - 1);
+            capture_right_position = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn() + 1);
+            team_start_row = 7;
+        }
 
+        var list_of_moves = pawnMoves(team_color, board, team_start_row, startPosition, one_up_position, two_up_position, capture_left_position, capture_right_position);
 
-
-
-
-
-
-
-
-        // _________________________________________________________________________________________________________________________________________________________
-
-//        var next_up_position_white = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn());
-//        var two_up_position_white = new ChessPosition(4, startPosition.getColumn());
-//        var next_up_position_black = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn());
-//        var two_up_position_black = new ChessPosition(5, startPosition.getColumn());
-//
-//        if ((team_color == ChessGame.TeamColor.WHITE) && is_position_on_board(next_up_position_white) && is_position_empty(board, next_up_position_white)) {
-//            list_of_moves.add(new ChessMove(startPosition, next_up_position_white, null));
-//            if (is_position_on_board(two_up_position_white) && is_position_empty(board, next_up_position_white) && is_position_empty(board, two_up_position_white)) {
-//                list_of_moves.add(new ChessMove(startPosition, two_up_position_white, null));
-//            }
-//
-//            // enemy capture
-//            for (var dir : white_enemy_capture_directions) {
-//                var potential_enemy_pos = new ChessPosition(startPosition.getRow() + dir[0], startPosition.getColumn() + dir[1]);
-//                if (is_position_on_board(potential_enemy_pos) && !is_position_empty(board, potential_enemy_pos) && (team_color != board.getPiece(potential_enemy_pos).getTeamColor())) {
-//                    list_of_moves.add(new ChessMove(startPosition, potential_enemy_pos, null));
+//            if(is_position_on_board(one_up_position) && is_position_empty(board, one_up_position)){ // move up one if on board and empty
+//                list_of_moves.add(new ChessMove(startPosition, one_up_position, null));
+//                if((startPosition.getRow() == 2) && is_position_on_board(two_up_position) && is_position_empty(board, two_up_position)){
+//                    list_of_moves.add(new ChessMove(startPosition, two_up_position, null)); // move up two if at starting row and if on board and empty
 //                }
 //            }
-//        } else if ((team_color == ChessGame.TeamColor.BLACK) && is_position_on_board(next_up_position_black) && is_position_empty(board, next_up_position_black)) {
-//            list_of_moves.add(new ChessMove(startPosition, next_up_position_black, null));
-//            if (is_position_on_board(two_up_position_black) && is_position_empty(board, next_up_position_black) && is_position_empty(board, two_up_position_black)) {
-//                list_of_moves.add(new ChessMove(startPosition, two_up_position_black, null));
+//            // capture enemy on left: if on board, not empty, and filled with enemy
+//            if(is_position_on_board(capture_left_position) && !is_position_empty(board, capture_left_position) && (board.getPiece(capture_left_position).getTeamColor() != team_color)){
+//                list_of_moves.add(new ChessMove(startPosition, capture_left_position, null));
 //            }
-//
-//            // add in enemy capture
-//            for (var dir : black_enemy_capture_directions) {
-//                var potential_enemy_pos = new ChessPosition(startPosition.getRow() + dir[0], startPosition.getColumn() + dir[1]);
-//                if (is_position_on_board(potential_enemy_pos) && !is_position_empty(board, potential_enemy_pos) && (team_color != board.getPiece(potential_enemy_pos).getTeamColor())) {
-//                    list_of_moves.add(new ChessMove(startPosition, potential_enemy_pos, null));
-//                }
+//            // capture enemy on right: if on board, not empty, and filled with enemy
+//            if(is_position_on_board(capture_right_position) && !is_position_empty(board, capture_right_position) && (board.getPiece(capture_right_position).getTeamColor() != team_color)){
+//                list_of_moves.add(new ChessMove(startPosition, capture_right_position, null));
 //            }
-//        }
 
-        // _________________________________________________________________________________________________________________________________________
+        return list_of_moves;
 
-        // capture enemy moves if you haven't moved yet but can still capture an enemy:
-        // white capture enemy
-//        for (var dir : white_enemy_capture_directions) {
-//            var potential_enemy_pos = new ChessPosition(startPosition.getRow() + dir[0], startPosition.getColumn() + dir[1]);
-//            if (is_position_on_board(potential_enemy_pos) && !is_position_empty(board, potential_enemy_pos) && (team_color != board.getPiece(potential_enemy_pos).getTeamColor())) {
-//                list_of_moves.add(new ChessMove(startPosition, potential_enemy_pos, null));
-//            }
-//
-//            // black capture enemy
-//            for (var dir1 : black_enemy_capture_directions) {
-//                var potential_enemy_pos = new ChessPosition(startPosition.getRow() + dir1[0], startPosition.getColumn() + dir1[1]);
-//                if (is_position_on_board(potential_enemy_pos) && !is_position_empty(board, potential_enemy_pos) && (team_color != board.getPiece(potential_enemy_pos).getTeamColor())) {
-//                    list_of_moves.add(new ChessMove(startPosition, potential_enemy_pos, null));
-//                }
-//
-//            }
+        }
+
+
+    public Collection<ChessMove> pawnMoves (ChessGame.TeamColor team_color, ChessBoard board, int team_start_row, ChessPosition startPosition, ChessPosition one_up_position, ChessPosition two_up_position, ChessPosition capture_left_position, ChessPosition capture_right_position){
+        Collection<ChessMove> list_of_moves = new ArrayList<ChessMove>();
+        if(is_position_on_board(one_up_position) && is_position_empty(board, one_up_position)){ // move up one if on board and empty
+            list_of_moves.add(new ChessMove(startPosition, one_up_position, null));
+            if((startPosition.getRow() == team_start_row) && is_position_on_board(two_up_position) && is_position_empty(board, two_up_position)){
+                list_of_moves.add(new ChessMove(startPosition, two_up_position, null)); // move up two if at starting row and if on board and empty
+            }
+        }
+        // capture enemy on left: if on board, not empty, and filled with enemy
+        if(is_position_on_board(capture_left_position) && !is_position_empty(board, capture_left_position) && (board.getPiece(capture_left_position).getTeamColor() != team_color)){
+            list_of_moves.add(new ChessMove(startPosition, capture_left_position, null));
+        }
+        // capture enemy on right: if on board, not empty, and filled with enemy
+        if(is_position_on_board(capture_right_position) && !is_position_empty(board, capture_right_position) && (board.getPiece(capture_right_position).getTeamColor() != team_color)){
+            list_of_moves.add(new ChessMove(startPosition, capture_right_position, null));
+        }
 
         return list_of_moves;
     }
