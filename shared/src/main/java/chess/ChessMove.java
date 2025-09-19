@@ -46,9 +46,6 @@ public class ChessMove {
         return promotionPiece;
     }
 
-    public boolean equals() { // override the equals() method
-        return true;  // this needs to be fixed
-    }
 
     @Override
     public String toString(){
