@@ -13,7 +13,7 @@ public class QueenMovesCalculator implements PieceMovesCalculator { // extends m
         // get all of the directions into an array
         int[][] directions_array = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}, {1,0}, {-1,0}, {0,1}, {0,-1}};
 
-        // trying one set of nested loops for all of the directions instead of diag_up_right & diag_up_left & etc.
+        // cycle through the directions
         for (var direction : directions_array) {
             var curr_position = new ChessPosition(startPosition.getRow() + direction[0], startPosition.getColumn() + direction[1]);
             while (is_position_on_board(curr_position) && is_position_empty(board, curr_position)) {

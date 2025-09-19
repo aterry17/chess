@@ -85,6 +85,9 @@ public class ChessPiece {
         else if(piece_type == PieceType.KING){
             return new KingMovesCalculator();
         }
+        else if(piece_type == PieceType.KNIGHT){
+            return new KnightMovesCalculator();
+        }
         else {
             throw new RuntimeException("you haven't implemented the other piece types yet :(");
         }
