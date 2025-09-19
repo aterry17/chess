@@ -79,6 +79,9 @@ public class ChessPiece {
         else if(piece_type == PieceType.PAWN) {
             return new PawnMovesCalculator();
         }
+        else if(piece_type == PieceType.QUEEN){
+            return new QueenMovesCalculator();
+        }
         else {
             throw new RuntimeException("you haven't implemented the other piece types yet :(");
         }
