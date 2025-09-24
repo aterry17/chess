@@ -19,7 +19,7 @@ public interface PieceMovesCalculator {
         for (var direction : directionsArray) {
             var teamColor = board.getPiece(startPosition).getTeamColor();
             var currPosition = new ChessPosition(startPosition.getRow() + direction[0], startPosition.getColumn() + direction[1]);
-            while (isPositionOnBoard(currPosition) && isPositionEmpty(board, currPosition)) {
+            while (onBoardEmpty(board, currPosition)) {
                 listOfMoves.add(new ChessMove(startPosition, currPosition, null));
                 currPosition = new ChessPosition(currPosition.getRow() + direction[0], currPosition.getColumn() + direction[1]);
             }
@@ -35,7 +35,7 @@ public interface PieceMovesCalculator {
         for (var direction : directionsArray) {
             var currPosition = new ChessPosition(startPosition.getRow() + direction[0], startPosition.getColumn() + direction[1]);
             // move to an empty space
-            if(isPositionOnBoard(currPosition) && isPositionEmpty(board, currPosition)) {
+            if(onBoardEmpty(board, currPosition)) {
                 listOfMoves.add(new ChessMove(startPosition, currPosition, null));
                 currPosition = new ChessPosition(currPosition.getRow() + direction[0], currPosition.getColumn() + direction[1]);
             }
@@ -45,5 +45,9 @@ public interface PieceMovesCalculator {
 
             }
         }
+    }
+
+    default boolean onBoardEmpty(ChessBoard board, ChessPosition currPosition){
+        return (isPositionOnBoard(currPosition) && isPositionEmpty(board, currPosition));
     }
 }
