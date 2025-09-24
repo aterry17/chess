@@ -23,9 +23,9 @@ public class QueenMovesCalculator implements PieceMovesCalculator { // extends m
             // make the capture enemy move here
             var potentialEnemyPosition = currPosition;
             // make sure it's actually on the board
-            if (!isPositionOnBoard(potentialEnemyPosition)) continue;
+            if (!isPositionOnBoard(potentialEnemyPosition)) {continue;}
                 // check the color
-            else if (teamColor == board.getPiece(potentialEnemyPosition).getTeamColor()) continue;
+            else if (teamColor == board.getPiece(potentialEnemyPosition).getTeamColor()) {continue;}
                 // assuming that everything is doing what I think it's doing, we should know herre that we
             else {
                 listOfMoves.add(new ChessMove(startPosition, potentialEnemyPosition, null));

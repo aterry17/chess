@@ -15,17 +15,17 @@ public class KnightMovesCalculator implements PieceMovesCalculator { // extends 
 
         // cycle through the directions
         for (var direction : directionsArray) {
-            var curr_position = new ChessPosition(startPosition.getRow() + direction[0], startPosition.getColumn() + direction[1]);
+            var currPosition = new ChessPosition(startPosition.getRow() + direction[0], startPosition.getColumn() + direction[1]);
 
             // move to an empty space
-            if(isPositionOnBoard(curr_position) && isPositionEmpty(board, curr_position)) {
-                listOfMoves.add(new ChessMove(startPosition, curr_position, null));
-                curr_position = new ChessPosition(curr_position.getRow() + direction[0], curr_position.getColumn() + direction[1]);
+            if(isPositionOnBoard(currPosition) && isPositionEmpty(board, currPosition)) {
+                listOfMoves.add(new ChessMove(startPosition, currPosition, null));
+                currPosition = new ChessPosition(currPosition.getRow() + direction[0], currPosition.getColumn() + direction[1]);
             }
 
             // move & capture enemy
-            if(isPositionOnBoard(curr_position) && !isPositionEmpty(board, curr_position) && (teamColor != board.getPiece(curr_position).getTeamColor())){
-                listOfMoves.add(new ChessMove(startPosition, curr_position, null));
+            if(isPositionOnBoard(currPosition) && !isPositionEmpty(board, currPosition) && (teamColor != board.getPiece(currPosition).getTeamColor())){
+                listOfMoves.add(new ChessMove(startPosition, currPosition, null));
 
             }
         }
