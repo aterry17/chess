@@ -5,49 +5,48 @@ import java.util.Collection;
 public interface PieceMovesCalculator {
 
     Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition);
-    default boolean isPositionOnBoard(ChessPosition currPosition){
-        return ((currPosition.getRow() >= 1) && (currPosition.getRow() <= 8) && (currPosition.getColumn() >=1) && (currPosition.getColumn() <= 8));
+    default boolean isPosOnBoard(ChessPosition currPos){
+        return ((currPos.getRow() >= 1) && (currPos.getRow() <= 8) && (currPos.getColumn() >=1) && (currPos.getColumn() <= 8));
     }
-    default boolean isPositionEmpty(ChessBoard board, ChessPosition currPosition){
-        if (!isPositionOnBoard(currPosition)) {
+    default boolean isPosEmpty(ChessBoard board, ChessPosition currPos){
+        if (!isPosOnBoard(currPos)) {
             throw new RuntimeException("Position is off board");
         }
-        return (board.getPiece(currPosition) == null);
+        return (board.getPiece(currPos) == null);
     }
 
-    default void continuousMove(ChessBoard board, Collection<ChessMove> listOfMoves, int[][] directionsArray, ChessPosition startPosition) {
-        for (var direction : directionsArray) {
-            var teamColor = board.getPiece(startPosition).getTeamColor();
-            var currPosition = new ChessPosition(startPosition.getRow() + direction[0], startPosition.getColumn() + direction[1]);
-            while (onBoardEmpty(board, currPosition)) {
-                listOfMoves.add(new ChessMove(startPosition, currPosition, null));
-                currPosition = new ChessPosition(currPosition.getRow() + direction[0], currPosition.getColumn() + direction[1]);
+    default void contMove(ChessBoard board, Collection<ChessMove> listOfMoves, int[][] dirArr, ChessPosition startPos) {
+        for (var dir : dirArr) {
+            var teamColor = board.getPiece(startPos).getTeamColor();
+            var currPos = new ChessPosition(startPos.getRow() + dir[0], startPos.getColumn() + dir[1]);
+            while (onBoardEmpty(board, currPos)) {
+                listOfMoves.add(new ChessMove(startPos, currPos, null));
+                currPos = new ChessPosition(currPos.getRow() + dir[0], currPos.getColumn() + dir[1]);
             }
-            var potentialEnemyPosition = currPosition;
-            if (isPositionOnBoard(potentialEnemyPosition) && (teamColor != board.getPiece(potentialEnemyPosition).getTeamColor())) {
-                listOfMoves.add(new ChessMove(startPosition, potentialEnemyPosition, null));
+            if (isPosOnBoard(currPos) && (teamColor != board.getPiece(currPos).getTeamColor())) {
+                listOfMoves.add(new ChessMove(startPos, currPos, null));
             }
         }
     }
 
-    default void stepMove(ChessBoard board, Collection<ChessMove> listOfMoves, int[][] directionsArray, ChessPosition startPosition){
-        var teamColor = board.getPiece(startPosition).getTeamColor();
-        for (var direction : directionsArray) {
-            var currPosition = new ChessPosition(startPosition.getRow() + direction[0], startPosition.getColumn() + direction[1]);
+    default void stepMove(ChessBoard board, Collection<ChessMove> listOfMoves, int[][] dirArr, ChessPosition startPos){
+        var teamColor = board.getPiece(startPos).getTeamColor();
+        for (var dir : dirArr) {
+            var currPos = new ChessPosition(startPos.getRow() + dir[0], startPos.getColumn() + dir[1]);
             // move to an empty space
-            if(onBoardEmpty(board, currPosition)) {
-                listOfMoves.add(new ChessMove(startPosition, currPosition, null));
-                currPosition = new ChessPosition(currPosition.getRow() + direction[0], currPosition.getColumn() + direction[1]);
+            if(onBoardEmpty(board, currPos)) {
+                listOfMoves.add(new ChessMove(startPos, currPos, null));
+                currPos = new ChessPosition(currPos.getRow() + dir[0], currPos.getColumn() + dir[1]);
             }
             // move & capture enemy
-            if(isPositionOnBoard(currPosition) && !isPositionEmpty(board, currPosition) && (teamColor != board.getPiece(currPosition).getTeamColor())){
-                listOfMoves.add(new ChessMove(startPosition, currPosition, null));
+            if(isPosOnBoard(currPos) && !isPosEmpty(board, currPos) && (teamColor != board.getPiece(currPos).getTeamColor())){
+                listOfMoves.add(new ChessMove(startPos, currPos, null));
 
             }
         }
     }
 
     default boolean onBoardEmpty(ChessBoard board, ChessPosition currPosition){
-        return (isPositionOnBoard(currPosition) && isPositionEmpty(board, currPosition));
+        return (isPosOnBoard(currPosition) && isPosEmpty(board, currPosition));
     }
 }

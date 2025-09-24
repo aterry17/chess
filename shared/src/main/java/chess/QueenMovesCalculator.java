@@ -7,7 +7,7 @@ public class QueenMovesCalculator implements PieceMovesCalculator { // extends m
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition startPosition) {
         Collection<ChessMove> listOfMoves = new ArrayList<ChessMove>();
         int[][] directionsArray = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}, {1,0}, {-1,0}, {0,1}, {0,-1}};
-        continuousMove(board, listOfMoves, directionsArray, startPosition);
+        contMove(board, listOfMoves, directionsArray, startPosition);
         return listOfMoves;
     }
 }
