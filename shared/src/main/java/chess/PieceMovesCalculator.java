@@ -15,4 +15,18 @@ public interface PieceMovesCalculator {
         return (board.getPiece(currPosition) == null);
     }
 
+    default void continuousMove(ChessBoard board, Collection<ChessMove> listOfMoves, int[][] directionsArray, ChessPosition startPosition) {
+        for (var direction : directionsArray) {
+            var teamColor = board.getPiece(startPosition).getTeamColor();
+            var currPosition = new ChessPosition(startPosition.getRow() + direction[0], startPosition.getColumn() + direction[1]);
+            while (isPositionOnBoard(currPosition) && isPositionEmpty(board, currPosition)) {
+                listOfMoves.add(new ChessMove(startPosition, currPosition, null));
+                currPosition = new ChessPosition(currPosition.getRow() + direction[0], currPosition.getColumn() + direction[1]);
+            }
+            var potentialEnemyPosition = currPosition;
+            if (isPositionOnBoard(potentialEnemyPosition) && (teamColor != board.getPiece(potentialEnemyPosition).getTeamColor())) {
+                listOfMoves.add(new ChessMove(startPosition, potentialEnemyPosition, null));
+            }
+        }
+    }
 }
