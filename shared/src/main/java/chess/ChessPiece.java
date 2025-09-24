@@ -1,8 +1,6 @@
 package chess;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -56,20 +54,11 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ChessPiece piece = board.getPiece(myPosition);
-
-        // Below is the TA approved format needed for accessing the PieceMovesMethod from BishopMovesCalculator()
-
-//        PieceMovesCalculator BishopMoves = new BishopMovesCalculator();
-//
-//        BishopMoves.pieceMoves(board, myPosition);
-        // ___________________________________________________________________
-
-
-        Collection<ChessMove> list_of_moves = (the_moves_calculator_I_need(piece.getPieceType()).pieceMoves(board, myPosition));
+        Collection<ChessMove> list_of_moves = (theMovesCalculatorINeed(piece.getPieceType()).pieceMoves(board, myPosition));
         return list_of_moves;
     }
 
-    public PieceMovesCalculator the_moves_calculator_I_need(ChessPiece.PieceType piece_type) {
+    public PieceMovesCalculator theMovesCalculatorINeed(ChessPiece.PieceType piece_type) {
         if(piece_type == PieceType.BISHOP) {
             return new BishopMovesCalculator();
         }
