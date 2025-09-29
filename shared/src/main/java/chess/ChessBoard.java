@@ -105,4 +105,14 @@ public class ChessBoard {
                 "squares=" + Arrays.toString(squares) +
                 '}';
     }
+
+
+    /**
+     * experimenting here with a deep copy method, to help with stuff oin ChessGame class
+     */
+    public ChessBoard deepCopy(){
+        ChessBoard copy = new ChessBoard();
+        copy.squares=  this.squares;
+        return copy;
+    }
 }

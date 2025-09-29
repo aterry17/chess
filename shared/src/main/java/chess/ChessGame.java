@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -10,15 +12,18 @@ import java.util.Collection;
  */
 public class ChessGame {
 
+    private TeamColor currTeamColor;
+    private ChessBoard board;
     public ChessGame() {
-
+        currTeamColor = TeamColor.WHITE; // White moves first, so when the ChessGame is initialized it should start on white
+        board = new ChessBoard();
     }
 
     /**
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        throw new RuntimeException("Not implemented");
+        return currTeamColor;
     }
 
     /**
@@ -27,7 +32,13 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        throw new RuntimeException("Not implemented");
+        // this should set the team color after the turn is made, e.g white makes move, then setTeamTurn changes to black
+        if (currTeamColor == TeamColor.WHITE){
+            currTeamColor = TeamColor.BLACK;
+        }
+        else {
+            currTeamColor = TeamColor.WHITE;
+        }
     }
 
     /**
@@ -46,7 +57,26 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+        // return null if there is no piece
+        ChessPiece piece = board.getPiece(startPosition);
+        if (piece == null){
+            return null;
+        }
+        // return all moves which do not result in isInCheck
+        Collection<ChessMove> allPossibleMoves = piece.pieceMoves(board, startPosition);
+        Collection<ChessMove> validMoves = new ArrayList<>();
+
+        for(ChessMove move: allPossibleMoves){
+            // make a new ChessBoard that is a copy, apply the move to the copy and check for kingWillBeSafe
+            ChessBoard copyBoard = new ChessBoard(board); // utilizing the deep copy method we just implemented
+
+            if (kingWillBeSafe(copyBoard, currTeamColor, move)){
+                validMoves.add(move);
+            }
+
+        }
+        return validMoves;
+
     }
 
     /**
@@ -66,7 +96,8 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return true;
+        // modify this later
     }
 
     /**
@@ -76,7 +107,7 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return false;
     }
 
     /**
@@ -87,7 +118,7 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return false;
     }
 
     /**
@@ -96,7 +127,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+        board.resetBoard();
     }
 
     /**
@@ -105,7 +136,32 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return board;
+    }
+
+
+    /**
+     * adding in a deep copy method for ChessGame
+     */
+    public ChessGame deepCopy(){
+        ChessGame copy = new ChessGame();
+        copy.currTeamColor = this.currTeamColor;
+        copy.board = this.board;
+        return copy;
+    }
+
+
+
+
+    /**
+     * @param board
+     * @param color
+     * @param move
+     * @return True if the proposed move would keep the king safe
+     */
+    private boolean kingWillBeSafe(ChessBoard board, ChessGame.TeamColor color, ChessMove move){
+
+        return true;
     }
 
 
