@@ -72,11 +72,17 @@ public class ChessGame {
             // apply the make move
             // then check isInCheck,if false, add the move to the new list
             ChessGame hypotheticalGame = this.deepCopy();
-            hypotheticalGame.makeMove(move); // need to handle the exception in makeMove for the red squiggly to go away
+
+            // need to put in a try / catch block -- not sure if this is correct
+            try {
+                hypotheticalGame.makeMove(move);
+            }
+            catch (InvalidMoveException exception){
+            }
+
             if (!hypotheticalGame.isInCheck(currTeamColor)){
                 validMoves.add(move);
             }
-
         }
         return validMoves;
 
@@ -89,7 +95,34 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        //if move is not a valid move for the piece at its starting loc:
+            // throw InvalidMoveException
+        ChessPiece piece = board.getPiece(move.getStartPosition());
+        Collection<ChessMove> pieceMoves = piece.pieceMoves(board, move.getStartPosition());
+        if(!pieceMoves.contains(move)){
+            throw new InvalidMoveException("move is not valid for piece in this position");
+        }
+        // else if it is not your team's turn
+            // throw InvalidMoveException
+        else if (piece.getTeamColor() != currTeamColor){
+            throw new InvalidMoveException("It is not your turn :(");
+        }
+        // else:
+            // make the move by modifying the board
+        else {
+            // not sure how to fit promotion piece into this
+            if(move.getPromotionPiece() == null) {
+                board.addPiece(move.getEndPosition(), piece);
+            }
+            // not sure how to do this pawn part, I don't think this is right
+            // this is creating a new piece of the promotion type
+            // but the piece that the pawn gets promoted to, is it a piece currently on the board, if so we need to remove that piece from its original position
+            // for example, if you promote your pawn to a queen, do you now have two queens on board? or do you remove the og queen from her position
+            // for a queen this wouldn't be so hard, becasue there is only 1, but for bishop or rook...?
+            else{
+                board.addPiece(move.getEndPosition(), new ChessPiece(currTeamColor, move.getPromotionPiece()));
+            }
+        }
     }
 
     /**
@@ -175,8 +208,4 @@ public class ChessGame {
         copy.board = this.board;
         return copy;
     }
-
-
-
-
 }
