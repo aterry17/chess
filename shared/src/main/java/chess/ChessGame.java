@@ -3,6 +3,7 @@ package chess;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -67,10 +68,12 @@ public class ChessGame {
         Collection<ChessMove> validMoves = new ArrayList<>();
 
         for(ChessMove move: allPossibleMoves){
-            // make a new ChessBoard that is a copy, apply the move to the copy and check for kingWillBeSafe
-            ChessBoard copyBoard = new ChessBoard(board); // utilizing the deep copy method we just implemented
-
-            if (kingWillBeSafe(copyBoard, currTeamColor, move)){
+            // make a copy ChessGame
+            // apply the make move
+            // then check isInCheck,if false, add the move to the new list
+            ChessGame hypotheticalGame = this.deepCopy();
+            hypotheticalGame.makeMove(move); // need to handle the exception in makeMove for the red squiggly to go away
+            if (!hypotheticalGame.isInCheck(currTeamColor)){
                 validMoves.add(move);
             }
 
@@ -140,6 +143,29 @@ public class ChessGame {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessGame chessGame = (ChessGame) o;
+        return currTeamColor == chessGame.currTeamColor && Objects.equals(board, chessGame.board);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(currTeamColor, board);
+    }
+
+    @Override
+    public String toString() {
+        return "ChessGame{" +
+                "currTeamColor=" + currTeamColor +
+                ", board=" + board +
+                '}';
+    }
+
+
     /**
      * adding in a deep copy method for ChessGame
      */
@@ -151,23 +177,6 @@ public class ChessGame {
     }
 
 
-
-
-    /**
-     * @param board
-     * @param color
-     * @param move
-     * @return True if the proposed move would keep the king safe
-     */
-    private boolean kingWillBeSafe(ChessBoard board, ChessGame.TeamColor color, ChessMove move){
-
-        return true;
-    }
-
-
-
-
-    // override the equals and hascode methods
 
 
 }
