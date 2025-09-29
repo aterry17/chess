@@ -97,7 +97,7 @@ public class ChessGame {
     public void makeMove(ChessMove move) throws InvalidMoveException {
         //if move is not a valid move for the piece at its starting loc:
             // throw InvalidMoveException
-        ChessPiece piece = board.getPiece(move.getStartPosition());
+        ChessPiece piece = board.getPiece(move.getStartPosition()); // piece is null here -- not sure why
         Collection<ChessMove> pieceMoves = piece.pieceMoves(board, move.getStartPosition());
         if(!pieceMoves.contains(move)){
             throw new InvalidMoveException("move is not valid for piece in this position");
