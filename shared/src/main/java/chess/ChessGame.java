@@ -33,13 +33,7 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        // this should set the team color after the turn is made, e.g white makes move, then setTeamTurn changes to black
-        if (currTeamColor == TeamColor.WHITE){
-            currTeamColor = TeamColor.BLACK;
-        }
-        else {
-            currTeamColor = TeamColor.WHITE;
-        }
+        currTeamColor = team;
     }
 
     /**
@@ -95,10 +89,15 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        //if move is not a valid move for the piece at its starting loc:
-            // throw InvalidMoveException
-        ChessPiece piece = board.getPiece(move.getStartPosition()); // piece is null here -- not sure why
+        // find your piece
+        ChessPiece piece = board.getPiece(move.getStartPosition());
+        // check to see if the piece actually exists
+        if (piece == null){
+            throw new InvalidMoveException("piece is null");
+        }
+        // collect all possible moves for that piece
         Collection<ChessMove> pieceMoves = piece.pieceMoves(board, move.getStartPosition());
+
         if(!pieceMoves.contains(move)){
             throw new InvalidMoveException("move is not valid for piece in this position");
         }
@@ -107,20 +106,26 @@ public class ChessGame {
         else if (piece.getTeamColor() != currTeamColor){
             throw new InvalidMoveException("It is not your turn :(");
         }
-        // else:
-            // make the move by modifying the board
+
         else {
+            ChessGame.TeamColor next_team_turn;
+            if (piece.getTeamColor() == TeamColor.BLACK){
+                next_team_turn = TeamColor.WHITE;
+            }
+            else {
+                next_team_turn = TeamColor.BLACK;
+            }
+
             // not sure how to fit promotion piece into this
             if(move.getPromotionPiece() == null) {
                 board.addPiece(move.getEndPosition(), piece);
+                setTeamTurn(next_team_turn);
             }
-            // not sure how to do this pawn part, I don't think this is right
-            // this is creating a new piece of the promotion type
-            // but the piece that the pawn gets promoted to, is it a piece currently on the board, if so we need to remove that piece from its original position
-            // for example, if you promote your pawn to a queen, do you now have two queens on board? or do you remove the og queen from her position
-            // for a queen this wouldn't be so hard, becasue there is only 1, but for bishop or rook...?
+
+            // need to add in the promotion piece part -- this very much is not right
             else{
                 board.addPiece(move.getEndPosition(), new ChessPiece(currTeamColor, move.getPromotionPiece()));
+                setTeamTurn(next_team_turn);
             }
         }
     }
@@ -163,7 +168,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        board.resetBoard();
+        this.board = board;
     }
 
     /**
