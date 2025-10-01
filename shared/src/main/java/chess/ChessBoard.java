@@ -25,6 +25,11 @@ public class ChessBoard {
         squares[position.getRow()-1][position.getColumn()-1] = piece; // arrays are 0-based but moves are 1-based so sub 1
     }
 
+    // adding this in here to make the ChessGame makeMove method work :)
+    public void removePiece(ChessPosition position, ChessPiece piece){
+        squares[position.getRow()-1][position.getColumn()-1] = null;
+    }
+
     /**
      * Gets a chess piece on the chessboard
      *

@@ -117,13 +117,14 @@ public class ChessGame {
             }
 
             // not sure how to fit promotion piece into this
-            if(move.getPromotionPiece() == null) {
+            if (move.getPromotionPiece() == null) {
+                // we also need to remove the piece from its current position
+                board.removePiece(move.getStartPosition(), piece);
                 board.addPiece(move.getEndPosition(), piece);
                 setTeamTurn(next_team_turn);
             }
-
-            // need to add in the promotion piece part -- this very much is not right
             else{
+                board.removePiece(move.getStartPosition(), piece);
                 board.addPiece(move.getEndPosition(), new ChessPiece(currTeamColor, move.getPromotionPiece()));
                 setTeamTurn(next_team_turn);
             }
