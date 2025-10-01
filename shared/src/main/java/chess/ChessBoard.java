@@ -1,8 +1,9 @@
 package chess;
 
-import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Objects;
 
 /**
@@ -45,18 +46,18 @@ public class ChessBoard {
     }
 
     // make a new function to return all pieces of one color
-    public Collection<ChessPiece> getTeamPieces(ChessGame.TeamColor teamColor){
-        var pieces = new ArrayList<ChessPiece>();
+    public LinkedHashMap<ChessPiece, ChessPosition> getTeam(ChessGame.TeamColor teamColor){
+        var team = new LinkedHashMap<ChessPiece, ChessPosition>();
 
         for (int i=1; i<=8; i++){
             for (int j=1; j<=8; j++){
                 var currPiece = this.getPiece(new ChessPosition(i, j));
                 if (currPiece.getTeamColor() == teamColor){
-                    pieces.add(currPiece);
+                    team.put(currPiece, new ChessPosition(i, j));
                 }
             }
         }
-        return pieces;
+        return team;
     }
 
     /**

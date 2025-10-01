@@ -1,7 +1,6 @@
 package chess;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -161,9 +160,17 @@ public class ChessGame {
      */
     public boolean isInStalemate(TeamColor teamColor) {
         if (!isInCheck(teamColor)){ // king is safe
-            // how to run through all teamColor pieces?
-            // -- especially for pieces of which there are multiple
-            // could we create a method in ChessBoard which returns all pieces of that color?
+            var team = board.getTeam(teamColor); // map of piece:position
+            for (var entry: team.entrySet()){
+                // getKey = piece, getValue = position, .pieceMoves returns an ArrayList --> if ArrayList is not empty we want to return false
+                if (entry.getKey().pieceMoves(board, entry.getValue()).size() != 0) {
+                    return false; // pieceMoves ArrayList was not size 0
+                }
+            }
+            return true; // all pieceMoves lists were of size 0 --> we can't move
+        }
+        else {
+            return false; // king is not safe
         }
     }
 
