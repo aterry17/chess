@@ -138,7 +138,7 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        return true;
+        return false;
         // modify this later
     }
 
@@ -160,7 +160,11 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        return false;
+        if (!isInCheck(teamColor)){ // king is safe
+            // how to run through all teamColor pieces?
+            // -- especially for pieces of which there are multiple
+            // could we create a method in ChessBoard which returns all pieces of that color?
+        }
     }
 
     /**
