@@ -52,6 +52,9 @@ public class ChessBoard {
         for (int i=1; i<=8; i++){
             for (int j=1; j<=8; j++){
                 var currPiece = this.getPiece(new ChessPosition(i, j));
+                if (currPiece == null){
+                    continue;
+                }
                 if (currPiece.getTeamColor() == teamColor){
                     team.put(currPiece, new ChessPosition(i, j));
                 }

@@ -161,9 +161,17 @@ public class ChessGame {
     public boolean isInStalemate(TeamColor teamColor) {
         if (!isInCheck(teamColor)){ // king is safe
             var team = board.getTeam(teamColor); // map of piece:position
-            for (var entry: team.entrySet()){
+//            // using pieceMoves
+//            for (var entry: team.entrySet()){
+//                // getKey = piece, getValue = position, .pieceMoves returns an ArrayList --> if ArrayList is not empty we want to return false
+//                if (entry.getKey().pieceMoves(board, entry.getValue()).size() != 0) {
+//                    return false; // pieceMoves ArrayList was not size 0
+//                }
+//            }
+            // trying to use validMoves instead of pieceMoves
+            for (var pos: team.values()){
                 // getKey = piece, getValue = position, .pieceMoves returns an ArrayList --> if ArrayList is not empty we want to return false
-                if (entry.getKey().pieceMoves(board, entry.getValue()).size() != 0) {
+                if (validMoves(pos).size() != 0) {
                     return false; // pieceMoves ArrayList was not size 0
                 }
             }
