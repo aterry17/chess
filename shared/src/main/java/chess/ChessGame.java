@@ -144,12 +144,16 @@ public class ChessGame {
         var enemyTeam = board.getTeam(enemyColor);
         // need to find King
         var team = board.getTeam(teamColor);
-        var kingPos = team.get(new ChessPiece(TeamColor.WHITE, ChessPiece.PieceType.KING)); // is this the correct way to grab the King's position?
+        var kingPos = team.get(new ChessPiece(teamColor, ChessPiece.PieceType.KING)); // is this the correct way to grab the King's position?
         for (var entry: enemyTeam.entrySet()){
             // piece:position
             var moves = entry.getKey().pieceMoves(board, entry.getValue());
             for (var move: moves){
-                if (move.getEndPosition() == kingPos){
+                var endPos = move.getEndPosition();
+//                if (endPos == kingPos){ // end position and kingPos are matching but not passing as true
+//                    return true;
+//                }
+                if ((endPos.getRow() == kingPos.getRow()) && (endPos.getColumn() == kingPos.getColumn())){
                     return true;
                 }
             }
