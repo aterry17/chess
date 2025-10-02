@@ -137,8 +137,24 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
+        var enemyColor = TeamColor.WHITE;
+        if (teamColor == TeamColor.WHITE){
+            enemyColor = TeamColor.BLACK;
+        }
+        var enemyTeam = board.getTeam(enemyColor);
+        // need to find King
+        var team = board.getTeam(teamColor);
+        var kingPos = team.get(new ChessPiece(TeamColor.WHITE, ChessPiece.PieceType.KING)); // is this the correct way to grab the King's position?
+        for (var entry: enemyTeam.entrySet()){
+            // piece:position
+            var moves = entry.getKey().pieceMoves(board, entry.getValue());
+            for (var move: moves){
+                if (move.getEndPosition() == kingPos){
+                    return true;
+                }
+            }
+        }
         return false;
-        // modify this later
     }
 
     /**
