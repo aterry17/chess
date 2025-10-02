@@ -67,13 +67,19 @@ public class ChessGame {
             ChessGame hypotheticalGame = this.deepCopy();
 
             // need to put in a try / catch block -- not sure if this is correct
+//            try {
+//                hypotheticalGame.makeMove(move);
+//            }
+//            catch (InvalidMoveException exception){
+//            }
+//
+//            if (!hypotheticalGame.isInCheck(currTeamColor)){
+//                validMoves.add(move);
+//            }
             try {
                 hypotheticalGame.makeMove(move);
             }
             catch (InvalidMoveException exception){
-            }
-
-            if (!hypotheticalGame.isInCheck(currTeamColor)){
                 validMoves.add(move);
             }
         }
@@ -105,14 +111,6 @@ public class ChessGame {
         else if (piece.getTeamColor() != currTeamColor){
             throw new InvalidMoveException("It is not your turn :(");
         }
-
-        /// just added the below else if in
-        ///  okay the below is not doing anything
-        else if (isInCheck(currTeamColor)) // throw in another InvalidMoveException for when you can't make a move because it would put your king in danger (i.e. isInCheck == true)
-            throw new InvalidMoveException("you're in check");
-
-
-
         else {
             ChessGame.TeamColor next_team_turn;
             if (piece.getTeamColor() == TeamColor.BLACK){
@@ -198,7 +196,8 @@ public class ChessGame {
             // trying to use validMoves instead of pieceMoves
             for (var pos: team.values()){
                 // getKey = piece, getValue = position, .pieceMoves returns an ArrayList --> if ArrayList is not empty we want to return false
-                if (validMoves(pos).size() != 0) {
+                var valMoves = validMoves(pos); // something is going wrong with validMoves here and below
+                if (valMoves.size() != 0) {
                     return false; // pieceMoves ArrayList was not size 0
                 }
             }
