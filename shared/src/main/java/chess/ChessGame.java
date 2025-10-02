@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessGame {
+public class ChessGame implements Cloneable{
 
     private TeamColor currTeamColor;
     private ChessBoard board;
@@ -64,8 +65,11 @@ public class ChessGame {
             // make a copy ChessGame
             // apply the make move
             // then check isInCheck,if false, add the move to the new list
-            ChessGame hypotheticalGame = this.deepCopy();
 
+            /// Is the below the right way to use the overridden clone?
+            ChessBoard hypBoard = (ChessBoard) board.clone();
+
+//            ____________________________________________________________________
             // need to put in a try / catch block -- not sure if this is correct
 //            try {
 //                hypotheticalGame.makeMove(move);
@@ -76,12 +80,33 @@ public class ChessGame {
 //            if (!hypotheticalGame.isInCheck(currTeamColor)){
 //                validMoves.add(move);
 //            }
+
+//            ____________________________________________________________________
+//            try {
+//                hypotheticalGame.makeMove(move);
+//            }
+//            catch (InvalidMoveException exception){
+//                validMoves.add(move);
+//            }
+//            _____________________________________________________________________
+//          // the below is saving exactly all of the wrong moves -- inverse of what we want
+//            try {
+//                hypotheticalGame.makeMove(move);
+//                validMoves.add(move);
+//            }
+//            catch (InvalidMoveException exception){
+//                continue;
+//            }
+//            _____________________________________________________________________________
             try {
                 hypotheticalGame.makeMove(move);
+                if (!hypotheticalGame.isInCheck(currTeamColor)){
+                    validMoves.add(move);
+                }
             }
             catch (InvalidMoveException exception){
-                validMoves.add(move);
             }
+
         }
         return validMoves;
 
@@ -252,11 +277,30 @@ public class ChessGame {
 
     /**
      * adding in a deep copy method for ChessGame
+     * below is not actually doing a deep copy
      */
-    public ChessGame deepCopy(){
-        ChessGame copy = new ChessGame();
-        copy.currTeamColor = this.currTeamColor;
-        copy.board = this.board;
-        return copy;
+//    public ChessGame deepCopy(){
+//        ChessGame copy = new ChessGame();
+//        copy.currTeamColor = this.currTeamColor;
+//        copy.board = this.board;
+//        return copy;
+//    }
+
+
+
+    @Override
+    protected Object clone() {
+        try {
+            var clone = (ChessGame) super.clone();
+            clone.currTeamColor = this.currTeamColor; // this might be a problem later
+            clone.board = (ChessBoard) this.board.clone();
+
+            return clone;
+        } catch (CloneNotSupportedException e){
+            throw new RuntimeException(e);
+        }
     }
+
+
+
 }
