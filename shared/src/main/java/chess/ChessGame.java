@@ -106,6 +106,13 @@ public class ChessGame {
             throw new InvalidMoveException("It is not your turn :(");
         }
 
+        /// just added the below else if in
+        ///  okay the below is not doing anything
+        else if (isInCheck(currTeamColor)) // throw in another InvalidMoveException for when you can't make a move because it would put your king in danger (i.e. isInCheck == true)
+            throw new InvalidMoveException("you're in check");
+
+
+
         else {
             ChessGame.TeamColor next_team_turn;
             if (piece.getTeamColor() == TeamColor.BLACK){
@@ -152,7 +159,7 @@ public class ChessGame {
                 var endPos = move.getEndPosition();
 //                if (endPos == kingPos){ // end position and kingPos are matching but not passing as true
 //                    return true;
-//                }
+//                } // why the above is not working I have absolutely no idea
                 if ((endPos.getRow() == kingPos.getRow()) && (endPos.getColumn() == kingPos.getColumn())){
                     return true;
                 }

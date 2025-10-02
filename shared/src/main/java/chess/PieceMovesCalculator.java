@@ -38,8 +38,9 @@ public interface PieceMovesCalculator {
                 listOfMoves.add(new ChessMove(startPos, currPos, null));
                 currPos = new ChessPosition(currPos.getRow() + dir[0], currPos.getColumn() + dir[1]);
             }
+            // just changed below from if to else if to fix problem in ChessGame isInCheck where King was moving two spaces up to capture an enemy
             // move & capture enemy
-            if(isPosOnBoard(currPos) && !isPosEmpty(board, currPos) && (teamColor != board.getPiece(currPos).getTeamColor())){
+            else if(isPosOnBoard(currPos) && !isPosEmpty(board, currPos) && (teamColor != board.getPiece(currPos).getTeamColor())){
                 listOfMoves.add(new ChessMove(startPos, currPos, null));
 
             }
