@@ -238,6 +238,7 @@ public class ChessGame implements Cloneable{
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
+        setTeamTurn(teamColor); // just added this in...
         boolean hi = isInCheck(teamColor);
         if (isInCheck(teamColor)){
             return false; // if you're in Check you're not in a stalemate
@@ -247,6 +248,7 @@ public class ChessGame implements Cloneable{
         ArrayList<ChessPosition> positions = (ArrayList<ChessPosition>) team.get(1);
 
         Collection<ChessMove> validMovesList = new ArrayList<>();
+
         for (ChessPiece piece: pieces){
             var pos = positions.get(pieces.indexOf(piece));
             var valMoves = validMoves(pos);
