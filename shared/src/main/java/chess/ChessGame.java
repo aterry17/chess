@@ -186,7 +186,7 @@ public class ChessGame implements Cloneable{
         var kingPos = teamPositions.get(teamPieces.indexOf(new ChessPiece(teamColor, ChessPiece.PieceType.KING)));
 
         for (var piece: enemyPieces){
-            var moves = piece.pieceMoves(board, enemyPositions.get(teamPieces.indexOf(piece)));
+            var moves = piece.pieceMoves(board, enemyPositions.get(enemyPieces.indexOf(piece)));
 
 //            var moves = entry.getKey().pieceMoves(board, entry.getValue());
             for (var move: moves){
@@ -242,16 +242,19 @@ public class ChessGame implements Cloneable{
         if (isInCheck(teamColor)){
             return false; // if you're in Check you're not in a stalemate
         }
-        var team = board.getTeam(teamColor); // team = piece:position
+        var team = board.getTeam(teamColor); // team = [[pieces], [positions]]
+        ArrayList<ChessPiece> pieces = (ArrayList<ChessPiece>) team.get(0);
+        ArrayList<ChessPosition> positions = (ArrayList<ChessPosition>) team.get(1);
+
         Collection<ChessMove> validMovesList = new ArrayList<>();
-        for (var piece: team.keySet()){
-            var pos = team.get(piece);
+        for (ChessPiece piece: pieces){
+            var pos = positions.get(pieces.indexOf(piece));
             var valMoves = validMoves(pos);
             validMovesList.addAll(valMoves);
 //            validMovesList.addAll(validMoves(team.get(piece))); // add all of the valid moves for the piece into the master list
         }
 
-        if (validMovesList.size() == 0){
+        if (validMovesList.isEmpty()){
             return true;
         }
         else {
