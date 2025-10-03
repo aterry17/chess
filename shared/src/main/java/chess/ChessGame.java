@@ -67,7 +67,7 @@ public class ChessGame implements Cloneable{
             // then check isInCheck,if false, add the move to the new list
 
             /// Is the below the right way to use the overridden clone?
-            ChessBoard hypBoard = (ChessBoard) board.clone();
+            ChessGame hypGame = (ChessGame) this.clone();
 
 //            ____________________________________________________________________
             // need to put in a try / catch block -- not sure if this is correct
@@ -99,8 +99,8 @@ public class ChessGame implements Cloneable{
 //            }
 //            _____________________________________________________________________________
             try {
-                hypotheticalGame.makeMove(move);
-                if (!hypotheticalGame.isInCheck(currTeamColor)){
+                hypGame.makeMove(move);
+                if (!hypGame.isInCheck(currTeamColor)){
                     validMoves.add(move);
                 }
             }
@@ -135,6 +135,9 @@ public class ChessGame implements Cloneable{
             // throw InvalidMoveException
         else if (piece.getTeamColor() != currTeamColor){
             throw new InvalidMoveException("It is not your turn :(");
+        }
+        else if (isInCheck(currTeamColor)){
+            throw new InvalidMoveException("you're in check");
         }
         else {
             ChessGame.TeamColor next_team_turn;
@@ -171,10 +174,19 @@ public class ChessGame implements Cloneable{
         if (teamColor == TeamColor.WHITE){
             enemyColor = TeamColor.BLACK;
         }
-        var enemyTeam = board.getTeam(enemyColor);
-        // need to find King
+        var enemyTeam = board.getTeam(enemyColor); // team = [[piece, piece, ...], [position, position, ...]]
+        var enemyPieces = enemyTeam.get(0);
+        var enemyPositions = enemyTeam.get(1);
+
+        // arrayList.indexOf(king) -- outputs the index of the king
         var team = board.getTeam(teamColor);
-        var kingPos = team.get(new ChessPiece(teamColor, ChessPiece.PieceType.KING)); // is this the correct way to grab the King's position?
+        var teamPieces = team.get(0);
+        var teamPositions = team.get(1);
+//        var kingPos = team.get(new ChessPiece(teamColor, ChessPiece.PieceType.KING)); // is this the correct way to grab the King's position?
+
+        var kingPos = teamPositions.get(teamPieces.indexOf(new ChessPiece(teamColor, ChessPiece.PieceType.KING)));
+
+
         for (var entry: enemyTeam.entrySet()){
             // piece:position
             var moves = entry.getKey().pieceMoves(board, entry.getValue());
@@ -209,32 +221,65 @@ public class ChessGame implements Cloneable{
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        if (!isInCheck(teamColor)){ // king is safe
-            var team = board.getTeam(teamColor); // map of piece:position
-//            // using pieceMoves
-//            for (var entry: team.entrySet()){
+        boolean hi = isInCheck(teamColor);
+        if (isInCheck(teamColor)){
+            return false; // if you're in Check you're not in a stalemate
+        }
+        var team = board.getTeam(teamColor); // team = piece:position
+        Collection<ChessMove> validMovesList = new ArrayList<>();
+        for (var piece: team.keySet()){
+            var pos = team.get(piece);
+            var valMoves = validMoves(pos);
+            validMovesList.addAll(valMoves);
+//            validMovesList.addAll(validMoves(team.get(piece))); // add all of the valid moves for the piece into the master list
+        }
+
+        if (validMovesList.size() == 0){
+            return true;
+        }
+        else {
+            return false;
+        }
+
+
+
+
+
+
+
+
+
+//__________________________________________________________________________________________
+//        if (isInCheck(teamColor)){ // king is safe
+//            /// anna took away !IsInCheck... check in-check logic
+//            var team = board.getTeam(teamColor); // map of piece:position
+////            // using pieceMoves
+////            for (var entry: team.entrySet()){
+////                // getKey = piece, getValue = position, .pieceMoves returns an ArrayList --> if ArrayList is not empty we want to return false
+////                if (entry.getKey().pieceMoves(board, entry.getValue()).size() != 0) {
+////                    return false; // pieceMoves ArrayList was not size 0
+////                }
+////            }
+//            // trying to use validMoves instead of pieceMoves
+//            for (var pos: team.values()){
 //                // getKey = piece, getValue = position, .pieceMoves returns an ArrayList --> if ArrayList is not empty we want to return false
-//                if (entry.getKey().pieceMoves(board, entry.getValue()).size() != 0) {
+//                var valMoves = validMoves(pos); // something is going wrong with validMoves here and below
+//                if (valMoves.size() != 0) {
 //                    return false; // pieceMoves ArrayList was not size 0
 //                }
 //            }
-            // trying to use validMoves instead of pieceMoves
-            for (var pos: team.values()){
-                // getKey = piece, getValue = position, .pieceMoves returns an ArrayList --> if ArrayList is not empty we want to return false
-                var valMoves = validMoves(pos); // something is going wrong with validMoves here and below
-                if (valMoves.size() != 0) {
-                    return false; // pieceMoves ArrayList was not size 0
-                }
-            }
-            return true; // all pieceMoves lists were of size 0 --> we can't move
-        }
-        else {
-            return false; // king is not safe
-        }
+//            return true; // all pieceMoves lists were of size 0 --> we can't move
+//        }
+//        else {
+//            return false; // king is not safe
+//        }
+
+
+
     }
 
     /**
-     * Sets this game's chessboard with a given board
+     * Sets this game's chessboard with a given boar
      *
      * @param board the new board to use
      */
@@ -274,25 +319,13 @@ public class ChessGame implements Cloneable{
                 '}';
     }
 
-
-    /**
-     * adding in a deep copy method for ChessGame
-     * below is not actually doing a deep copy
-     */
-//    public ChessGame deepCopy(){
-//        ChessGame copy = new ChessGame();
-//        copy.currTeamColor = this.currTeamColor;
-//        copy.board = this.board;
-//        return copy;
-//    }
-
-
-
+    // yay! this is working except for the shallow copying o the teamColor
     @Override
     protected Object clone() {
         try {
             var clone = (ChessGame) super.clone();
-            clone.currTeamColor = this.currTeamColor; // this might be a problem later
+//            clone.currTeamColor = this.currTeamColor; // this might be a problem later
+//            clone.currTeamColor = this.currTeamColor.clone();
             clone.board = (ChessBoard) this.board.clone();
 
             return clone;

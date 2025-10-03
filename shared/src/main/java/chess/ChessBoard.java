@@ -1,10 +1,8 @@
 package chess;
 
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Objects;
+import java.sql.Array;
+import java.util.*;
 
 /**
  * A chessboard that can hold and rearrange chess pieces.
@@ -46,8 +44,15 @@ public class ChessBoard implements Cloneable{
     }
 
     // make a new function to return all pieces of one color
-    public LinkedHashMap<ChessPiece, ChessPosition> getTeam(ChessGame.TeamColor teamColor){
-        var team = new LinkedHashMap<ChessPiece, ChessPosition>();
+    public ArrayList<List<?>> getTeam(ChessGame.TeamColor teamColor){
+//        var team = new LinkedHashMap<ChessPiece, ChessPosition>();
+        // hashmap isn't working because we're replacing values (positions) for the same key, instead of duplicating the key
+        // could try using a hashmap with ChessPiece --> set(ChessPosition)
+
+        // also could try making two separate arrayLists -- pieces & positions w/ team = ArrayList(pieces, positions)
+        ArrayList<List<?>> team = new ArrayList<>();
+        ArrayList<ChessPiece> pieces = new ArrayList<>();
+        ArrayList<ChessPosition> positions = new ArrayList<>();
 
         for (int i=1; i<=8; i++){
             for (int j=1; j<=8; j++){
@@ -56,11 +61,15 @@ public class ChessBoard implements Cloneable{
                     continue;
                 }
                 if (currPiece.getTeamColor() == teamColor){
-                    team.put(currPiece, new ChessPosition(i, j));
+                    pieces.add(currPiece);
+                    positions.add(new ChessPosition(i, j));
+//                    team.put(currPiece, new ChessPosition(i, j));
                 }
             }
         }
-        return team;
+        team.add(pieces);
+        team.add(positions);
+        return team; // team = [[piece, piece, ...], [position, position, ...]]
     }
 
     /**
