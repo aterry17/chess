@@ -17,6 +17,7 @@ public class ChessGame implements Cloneable{
     public ChessGame() {
         currTeamColor = TeamColor.WHITE; // White moves first, so when the ChessGame is initialized it should start on white
         board = new ChessBoard();
+        board.resetBoard();
     }
 
     /**
