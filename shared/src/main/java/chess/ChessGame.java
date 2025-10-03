@@ -136,9 +136,6 @@ public class ChessGame implements Cloneable{
         else if (piece.getTeamColor() != currTeamColor){
             throw new InvalidMoveException("It is not your turn :(");
         }
-        else if (isInCheck(currTeamColor)){
-            throw new InvalidMoveException("you're in check");
-        }
         else {
             ChessGame.TeamColor next_team_turn;
             if (piece.getTeamColor() == TeamColor.BLACK){
