@@ -61,6 +61,8 @@ public class ChessGame implements Cloneable{
         Collection<ChessMove> allPossibleMoves = piece.pieceMoves(board, startPosition);
         Collection<ChessMove> validMoves = new ArrayList<>();
 
+        setTeamTurn(piece.getTeamColor()); // will this make valiMoves independent of teamTurn?
+
         for(ChessMove move: allPossibleMoves){
             // make a copy ChessGame
             // apply the make move
@@ -69,35 +71,6 @@ public class ChessGame implements Cloneable{
             /// Is the below the right way to use the overridden clone?
             ChessGame hypGame = (ChessGame) this.clone();
 
-//            ____________________________________________________________________
-            // need to put in a try / catch block -- not sure if this is correct
-//            try {
-//                hypotheticalGame.makeMove(move);
-//            }
-//            catch (InvalidMoveException exception){
-//            }
-//
-//            if (!hypotheticalGame.isInCheck(currTeamColor)){
-//                validMoves.add(move);
-//            }
-
-//            ____________________________________________________________________
-//            try {
-//                hypotheticalGame.makeMove(move);
-//            }
-//            catch (InvalidMoveException exception){
-//                validMoves.add(move);
-//            }
-//            _____________________________________________________________________
-//          // the below is saving exactly all of the wrong moves -- inverse of what we want
-//            try {
-//                hypotheticalGame.makeMove(move);
-//                validMoves.add(move);
-//            }
-//            catch (InvalidMoveException exception){
-//                continue;
-//            }
-//            _____________________________________________________________________________
             try {
                 hypGame.makeMove(move);
                 if (!hypGame.isInCheck(currTeamColor)){
@@ -358,7 +331,7 @@ public class ChessGame implements Cloneable{
     protected Object clone() {
         try {
             var clone = (ChessGame) super.clone();
-//            clone.currTeamColor = this.currTeamColor; // this might be a problem later
+            clone.currTeamColor = this.currTeamColor; // this might be a problem later
 //            clone.currTeamColor = this.currTeamColor.clone();
             clone.board = (ChessBoard) this.board.clone();
 
