@@ -1,7 +1,6 @@
 package chess;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -170,38 +169,17 @@ public class ChessGame implements Cloneable{
 
         var kingPos = teamPositions.get(teamPieces.indexOf(new ChessPiece(teamColor, ChessPiece.PieceType.KING)));
 
-        for (var piece: enemyPieces){
-            var moves = piece.pieceMoves(board, enemyPositions.get(enemyPieces.indexOf(piece)));
+//        for (var piece: enemyPieces){
+          for (int i=0; i < enemyPieces.size(); i++) {
+            var moves = enemyPieces.get(i).pieceMoves(board, enemyPositions.get(i));
 
-//            var moves = entry.getKey().pieceMoves(board, entry.getValue());
             for (var move: moves){
                 var endPos = move.getEndPosition();
-//                if (endPos == kingPos){ // end position and kingPos are matching but not passing as true
-//                    return true;
-//                } // why the above is not working I have absolutely no idea
                 if ((endPos.getRow() == kingPos.getRow()) && (endPos.getColumn() == kingPos.getColumn())){
                     return true;
                 }
             }
         }
-
-
-//____________________________________________________________________________________________________________________
-//        var kingPos = team.get(new ChessPiece(teamColor, ChessPiece.PieceType.KING)); // is this the correct way to grab the King's position?
-//        // using the hashmap:
-//        for (var entry: enemyTeam.entrySet()){
-//            // piece:position
-//            var moves = entry.getKey().pieceMoves(board, entry.getValue());
-//            for (var move: moves){
-//                var endPos = move.getEndPosition();
-////                if (endPos == kingPos){ // end position and kingPos are matching but not passing as true
-////                    return true;
-////                } // why the above is not working I have absolutely no idea
-//                if ((endPos.getRow() == kingPos.getRow()) && (endPos.getColumn() == kingPos.getColumn())){
-//                    return true;
-//                }
-//            }
-//        }
         return false;
     }
 
@@ -212,7 +190,25 @@ public class ChessGame implements Cloneable{
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        return false;
+        if (!isInCheck(teamColor)){ // if you're not in check, then your king isn't in danger
+            return false;
+        }
+        Collection<ChessMove> moves = new ArrayList<>();
+
+        var team = board.getTeam(teamColor);
+//        ArrayList<ChessPiece> teamPieces = (ArrayList<ChessPiece>) team.get(0);
+        ArrayList<ChessPosition> teamPositions = (ArrayList<ChessPosition>) team.get(1);
+
+        for (var pos: teamPositions){
+            moves.addAll(validMoves(pos));
+        }
+        if (moves.isEmpty()){
+            return true;
+        }
+        else{
+            return false;
+        }
+
     }
 
     /**
@@ -247,41 +243,6 @@ public class ChessGame implements Cloneable{
         else {
             return false;
         }
-
-
-
-
-
-
-
-
-
-//__________________________________________________________________________________________
-//        if (isInCheck(teamColor)){ // king is safe
-//            /// anna took away !IsInCheck... check in-check logic
-//            var team = board.getTeam(teamColor); // map of piece:position
-////            // using pieceMoves
-////            for (var entry: team.entrySet()){
-////                // getKey = piece, getValue = position, .pieceMoves returns an ArrayList --> if ArrayList is not empty we want to return false
-////                if (entry.getKey().pieceMoves(board, entry.getValue()).size() != 0) {
-////                    return false; // pieceMoves ArrayList was not size 0
-////                }
-////            }
-//            // trying to use validMoves instead of pieceMoves
-//            for (var pos: team.values()){
-//                // getKey = piece, getValue = position, .pieceMoves returns an ArrayList --> if ArrayList is not empty we want to return false
-//                var valMoves = validMoves(pos); // something is going wrong with validMoves here and below
-//                if (valMoves.size() != 0) {
-//                    return false; // pieceMoves ArrayList was not size 0
-//                }
-//            }
-//            return true; // all pieceMoves lists were of size 0 --> we can't move
-//        }
-//        else {
-//            return false; // king is not safe
-//        }
-
-
 
     }
 
