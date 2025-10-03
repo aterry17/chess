@@ -145,17 +145,32 @@ public class ChessGame implements Cloneable{
                 next_team_turn = TeamColor.BLACK;
             }
 
-            // not sure how to fit promotion piece into this
+
             if (move.getPromotionPiece() == null) {
-                // we also need to remove the piece from its current position
                 board.removePiece(move.getStartPosition(), piece);
                 board.addPiece(move.getEndPosition(), piece);
-                setTeamTurn(next_team_turn);
+                if (isInCheck(currTeamColor)) { // if you're in check --> undo the move & throw exceptions
+                    board.removePiece(move.getEndPosition(), piece);
+                    board.addPiece(move.getStartPosition(), piece);
+                    throw new InvalidMoveException("you have to save your king!");
+                }
+                else{ // if you're not in check, then you didn't remove the piece and you should set the team turn
+                    setTeamTurn(next_team_turn);
+                }
+
             }
             else{
                 board.removePiece(move.getStartPosition(), piece);
                 board.addPiece(move.getEndPosition(), new ChessPiece(currTeamColor, move.getPromotionPiece()));
-                setTeamTurn(next_team_turn);
+
+                if (isInCheck(currTeamColor)) { // if you're in check --> undo the move & throw exception
+                    board.removePiece(move.getEndPosition(), new ChessPiece(currTeamColor, move.getPromotionPiece()));
+                    board.addPiece(move.getStartPosition(), piece);
+                    throw new InvalidMoveException("you have to save your king!");
+                }
+                else {
+                    setTeamTurn(next_team_turn);
+                }
             }
         }
     }
@@ -338,7 +353,7 @@ public class ChessGame implements Cloneable{
                 '}';
     }
 
-    // yay! this is working except for the shallow copying o the teamColor
+    // yay! this is working except for the shallow copying of the teamColor
     @Override
     protected Object clone() {
         try {
