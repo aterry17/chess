@@ -175,21 +175,20 @@ public class ChessGame implements Cloneable{
             enemyColor = TeamColor.BLACK;
         }
         var enemyTeam = board.getTeam(enemyColor); // team = [[piece, piece, ...], [position, position, ...]]
-        var enemyPieces = enemyTeam.get(0);
-        var enemyPositions = enemyTeam.get(1);
+        ArrayList<ChessPiece> enemyPieces = (ArrayList<ChessPiece>) enemyTeam.get(0);
+        ArrayList<ChessPosition> enemyPositions = (ArrayList <ChessPosition>) enemyTeam.get(1);
 
         // arrayList.indexOf(king) -- outputs the index of the king
         var team = board.getTeam(teamColor);
-        var teamPieces = team.get(0);
-        var teamPositions = team.get(1);
-//        var kingPos = team.get(new ChessPiece(teamColor, ChessPiece.PieceType.KING)); // is this the correct way to grab the King's position?
+        ArrayList<ChessPiece> teamPieces = (ArrayList<ChessPiece>) team.get(0);
+        ArrayList<ChessPosition> teamPositions = (ArrayList<ChessPosition>) team.get(1);
 
         var kingPos = teamPositions.get(teamPieces.indexOf(new ChessPiece(teamColor, ChessPiece.PieceType.KING)));
 
+        for (var piece: enemyPieces){
+            var moves = piece.pieceMoves(board, enemyPositions.get(teamPieces.indexOf(piece)));
 
-        for (var entry: enemyTeam.entrySet()){
-            // piece:position
-            var moves = entry.getKey().pieceMoves(board, entry.getValue());
+//            var moves = entry.getKey().pieceMoves(board, entry.getValue());
             for (var move: moves){
                 var endPos = move.getEndPosition();
 //                if (endPos == kingPos){ // end position and kingPos are matching but not passing as true
@@ -200,6 +199,24 @@ public class ChessGame implements Cloneable{
                 }
             }
         }
+
+
+//____________________________________________________________________________________________________________________
+//        var kingPos = team.get(new ChessPiece(teamColor, ChessPiece.PieceType.KING)); // is this the correct way to grab the King's position?
+//        // using the hashmap:
+//        for (var entry: enemyTeam.entrySet()){
+//            // piece:position
+//            var moves = entry.getKey().pieceMoves(board, entry.getValue());
+//            for (var move: moves){
+//                var endPos = move.getEndPosition();
+////                if (endPos == kingPos){ // end position and kingPos are matching but not passing as true
+////                    return true;
+////                } // why the above is not working I have absolutely no idea
+//                if ((endPos.getRow() == kingPos.getRow()) && (endPos.getColumn() == kingPos.getColumn())){
+//                    return true;
+//                }
+//            }
+//        }
         return false;
     }
 
