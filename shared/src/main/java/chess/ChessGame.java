@@ -57,20 +57,12 @@ public class ChessGame implements Cloneable{
         if (piece == null){
             return null;
         }
+        setTeamTurn(piece.getTeamColor());
         // return all moves which do not result in isInCheck
         Collection<ChessMove> allPossibleMoves = piece.pieceMoves(board, startPosition);
         Collection<ChessMove> validMoves = new ArrayList<>();
-
-        setTeamTurn(piece.getTeamColor()); // will this make valiMoves independent of teamTurn?
-
         for(ChessMove move: allPossibleMoves){
-            // make a copy ChessGame
-            // apply the make move
-            // then check isInCheck,if false, add the move to the new list
-
-            /// Is the below the right way to use the overridden clone?
             ChessGame hypGame = (ChessGame) this.clone();
-
             try {
                 hypGame.makeMove(move);
                 if (!hypGame.isInCheck(currTeamColor)){
@@ -79,10 +71,8 @@ public class ChessGame implements Cloneable{
             }
             catch (InvalidMoveException exception){
             }
-
         }
         return validMoves;
-
     }
 
     /**
@@ -92,33 +82,25 @@ public class ChessGame implements Cloneable{
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        // find your piece
         ChessPiece piece = board.getPiece(move.getStartPosition());
-        // check to see if the piece actually exists
         if (piece == null){
             throw new InvalidMoveException("piece is null");
         }
-        // collect all possible moves for that piece
         Collection<ChessMove> pieceMoves = piece.pieceMoves(board, move.getStartPosition());
-
         if(!pieceMoves.contains(move)){
             throw new InvalidMoveException("move is not valid for piece in this position");
         }
-        // else if it is not your team's turn
-            // throw InvalidMoveException
         else if (piece.getTeamColor() != currTeamColor){
             throw new InvalidMoveException("It is not your turn :(");
         }
         else {
-            ChessGame.TeamColor next_team_turn;
+            ChessGame.TeamColor nextTeamTurn;
             if (piece.getTeamColor() == TeamColor.BLACK){
-                next_team_turn = TeamColor.WHITE;
+                nextTeamTurn = TeamColor.WHITE;
             }
             else {
-                next_team_turn = TeamColor.BLACK;
+                nextTeamTurn = TeamColor.BLACK;
             }
-
-
             if (move.getPromotionPiece() == null) {
                 board.removePiece(move.getStartPosition(), piece);
                 board.addPiece(move.getEndPosition(), piece);
@@ -128,9 +110,8 @@ public class ChessGame implements Cloneable{
                     throw new InvalidMoveException("you have to save your king!");
                 }
                 else{ // if you're not in check, then you didn't remove the piece and you should set the team turn
-                    setTeamTurn(next_team_turn);
+                    setTeamTurn(nextTeamTurn);
                 }
-
             }
             else{
                 board.removePiece(move.getStartPosition(), piece);
@@ -142,7 +123,7 @@ public class ChessGame implements Cloneable{
                     throw new InvalidMoveException("you have to save your king!");
                 }
                 else {
-                    setTeamTurn(next_team_turn);
+                    setTeamTurn(nextTeamTurn);
                 }
             }
         }
@@ -191,25 +172,10 @@ public class ChessGame implements Cloneable{
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        if (!isInCheck(teamColor)){ // if you're not in check, then your king isn't in danger
+        if (!isInCheck(teamColor)){
             return false;
         }
-        Collection<ChessMove> moves = new ArrayList<>();
-
-        var team = board.getTeam(teamColor);
-//        ArrayList<ChessPiece> teamPieces = (ArrayList<ChessPiece>) team.get(0);
-        ArrayList<ChessPosition> teamPositions = (ArrayList<ChessPosition>) team.get(1);
-
-        for (var pos: teamPositions){
-            moves.addAll(validMoves(pos));
-        }
-        if (moves.isEmpty()){
-            return true;
-        }
-        else{
-            return false;
-        }
-
+        return noValidMoves(teamColor);
     }
 
     /**
@@ -220,31 +186,10 @@ public class ChessGame implements Cloneable{
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        setTeamTurn(teamColor); // just added this in...
-        boolean hi = isInCheck(teamColor);
         if (isInCheck(teamColor)){
-            return false; // if you're in Check you're not in a stalemate
-        }
-        var team = board.getTeam(teamColor); // team = [[pieces], [positions]]
-        ArrayList<ChessPiece> pieces = (ArrayList<ChessPiece>) team.get(0);
-        ArrayList<ChessPosition> positions = (ArrayList<ChessPosition>) team.get(1);
-
-        Collection<ChessMove> validMovesList = new ArrayList<>();
-
-        for (ChessPiece piece: pieces){
-            var pos = positions.get(pieces.indexOf(piece));
-            var valMoves = validMoves(pos);
-            validMovesList.addAll(valMoves);
-//            validMovesList.addAll(validMoves(team.get(piece))); // add all of the valid moves for the piece into the master list
-        }
-
-        if (validMovesList.isEmpty()){
-            return true;
-        }
-        else {
             return false;
         }
-
+        return noValidMoves(teamColor);
     }
 
     /**
@@ -263,6 +208,21 @@ public class ChessGame implements Cloneable{
      */
     public ChessBoard getBoard() {
         return board;
+    }
+
+    public boolean noValidMoves(ChessGame.TeamColor teamColor){
+        Collection<ChessMove> moves = new ArrayList<>();
+        var team = board.getTeam(teamColor);
+        ArrayList<ChessPosition> teamPositions = (ArrayList<ChessPosition>) team.get(1);
+        for (var pos: teamPositions){
+            moves.addAll(validMoves(pos));
+        }
+        if (moves.isEmpty()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 
@@ -288,13 +248,11 @@ public class ChessGame implements Cloneable{
                 '}';
     }
 
-    // yay! this is working except for the shallow copying of the teamColor
     @Override
     protected Object clone() {
         try {
             var clone = (ChessGame) super.clone();
-            clone.currTeamColor = this.currTeamColor; // this might be a problem later
-//            clone.currTeamColor = this.currTeamColor.clone();
+            clone.currTeamColor = this.currTeamColor;
             clone.board = (ChessBoard) this.board.clone();
 
             return clone;

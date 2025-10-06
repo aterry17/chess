@@ -43,13 +43,7 @@ public class ChessBoard implements Cloneable{
         return squares[position.getRow()-1][position.getColumn()-1];
     }
 
-    // make a new function to return all pieces of one color
     public ArrayList<List<?>> getTeam(ChessGame.TeamColor teamColor){
-//        var team = new LinkedHashMap<ChessPiece, ChessPosition>();
-        // hashmap isn't working because we're replacing values (positions) for the same key, instead of duplicating the key
-        // could try using a hashmap with ChessPiece --> set(ChessPosition)
-
-        // also could try making two separate arrayLists -- pieces & positions w/ team = ArrayList(pieces, positions)
         ArrayList<List<?>> team = new ArrayList<>();
         ArrayList<ChessPiece> pieces = new ArrayList<>();
         ArrayList<ChessPosition> positions = new ArrayList<>();
@@ -63,7 +57,6 @@ public class ChessBoard implements Cloneable{
                 if (currPiece.getTeamColor() == teamColor){
                     pieces.add(currPiece);
                     positions.add(new ChessPosition(i, j));
-//                    team.put(currPiece, new ChessPosition(i, j));
                 }
             }
         }
@@ -140,7 +133,6 @@ public class ChessBoard implements Cloneable{
                 "squares=" + Arrays.toString(squares) +
                 '}';
     }
-
 
     @Override
     protected Object clone() {
