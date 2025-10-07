@@ -151,7 +151,8 @@ public class ChessGame implements Cloneable{
             var moves = enemyPieces.get(i).pieceMoves(board, enemyPositions.get(i));
             for (var move: moves){
                 var endPos = move.getEndPosition();
-                if ((endPos.getRow() == kingPos.getRow()) && (endPos.getColumn() == kingPos.getColumn())){ // for some reason doing endPos == kingPos is not working
+                // for some reason doing endPos == kingPos is not working
+                if ((endPos.getRow() == kingPos.getRow()) && (endPos.getColumn() == kingPos.getColumn())){
                     return true;
                 }
             }

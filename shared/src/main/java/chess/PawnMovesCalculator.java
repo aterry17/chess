@@ -34,36 +34,36 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
         return listOfMoves;
     }
 
-    public Collection<ChessMove> pawnMoves (ChessGame.TeamColor teamColor, ChessBoard board, int startRow, ChessPosition startPos, ChessPosition oneUpPos, ChessPosition twoUpPos, ChessPosition captLeftPos, ChessPosition captRightPos){
+    public Collection<ChessMove> pawnMoves (ChessGame.TeamColor tC, ChessBoard b, int sR, ChessPosition sP, ChessPosition p1, ChessPosition p2, ChessPosition pL, ChessPosition pR){
         Collection<ChessMove> listOfMoves = new ArrayList<ChessMove>();
-        if(isPosOnBoard(oneUpPos) && isPosEmpty(board, oneUpPos)){
+        if(isPosOnBoard(p1) && isPosEmpty(b, p1)){
             // move up two for starting row
-            if((startPos.getRow() == startRow) && isPosOnBoard(twoUpPos) && isPosEmpty(board, twoUpPos)){
-                listOfMoves.add(new ChessMove(startPos, twoUpPos, null)); // move up two if at starting row and if on board and empty
+            if((sP.getRow() == sR) && isPosOnBoard(p2) && isPosEmpty(b, p2)){
+                listOfMoves.add(new ChessMove(sP, p2, null)); // move up two if at starting row and if on board and empty
             }// check for promotion row
-            if(isRowPromotion(teamColor, oneUpPos.getRow())){
-                addPromotionMoves(startPos, oneUpPos, listOfMoves);
+            if(isRowPromotion(tC, p1.getRow())){
+                addPromotionMoves(sP, p1, listOfMoves);
             } // move up one (no promotion)
             else{
-                listOfMoves.add(new ChessMove(startPos, oneUpPos, null));
+                listOfMoves.add(new ChessMove(sP, p1, null));
             }
         }// capture enemy on left: if on board, not empty, and filled with enemy
-        if(isPosOnBoard(captLeftPos) && !isPosEmpty(board, captLeftPos) && (board.getPiece(captLeftPos).getTeamColor() != teamColor)){
+        if(isPosOnBoard(pL) && !isPosEmpty(b, pL) && (b.getPiece(pL).getTeamColor() != tC)){
             // add in promotion move if it's a promotion row
-            if(isRowPromotion(teamColor, captLeftPos.getRow())){
-                addPromotionMoves(startPos, captLeftPos, listOfMoves);
+            if(isRowPromotion(tC, pL.getRow())){
+                addPromotionMoves(sP, pL, listOfMoves);
             } // capture if no promotion
             else{
-                listOfMoves.add(new ChessMove(startPos, captLeftPos, null));
+                listOfMoves.add(new ChessMove(sP, pL, null));
             }
         }// capture enemy on right: if on board, not empty, and filled with enemy
-        if(isPosOnBoard(captRightPos) && !isPosEmpty(board, captRightPos) && (board.getPiece(captRightPos).getTeamColor() != teamColor)){
+        if(isPosOnBoard(pR) && !isPosEmpty(b, pR) && (b.getPiece(pR).getTeamColor() != tC)){
             // add in promotion move if it's a promotion row
-            if(isRowPromotion(teamColor, captRightPos.getRow())){
-                addPromotionMoves(startPos, captRightPos, listOfMoves);
+            if(isRowPromotion(tC, pR.getRow())){
+                addPromotionMoves(sP, pR, listOfMoves);
             } // capture if no promotion
             else{
-                listOfMoves.add(new ChessMove(startPos, captRightPos, null));
+                listOfMoves.add(new ChessMove(sP, pR, null));
             }
         }return listOfMoves;
     }
