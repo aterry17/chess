@@ -143,21 +143,15 @@ public class ChessGame implements Cloneable{
         var enemyTeam = board.getTeam(enemyColor); // team = [[piece, piece, ...], [position, position, ...]]
         ArrayList<ChessPiece> enemyPieces = (ArrayList<ChessPiece>) enemyTeam.get(0);
         ArrayList<ChessPosition> enemyPositions = (ArrayList <ChessPosition>) enemyTeam.get(1);
-
-        // arrayList.indexOf(king) -- outputs the index of the king
         var team = board.getTeam(teamColor);
         ArrayList<ChessPiece> teamPieces = (ArrayList<ChessPiece>) team.get(0);
         ArrayList<ChessPosition> teamPositions = (ArrayList<ChessPosition>) team.get(1);
-
         var kingPos = teamPositions.get(teamPieces.indexOf(new ChessPiece(teamColor, ChessPiece.PieceType.KING)));
-
-//        for (var piece: enemyPieces){
-          for (int i=0; i < enemyPieces.size(); i++) {
+        for (int i=0; i < enemyPieces.size(); i++) {
             var moves = enemyPieces.get(i).pieceMoves(board, enemyPositions.get(i));
-
             for (var move: moves){
                 var endPos = move.getEndPosition();
-                if ((endPos.getRow() == kingPos.getRow()) && (endPos.getColumn() == kingPos.getColumn())){
+                if ((endPos.getRow() == kingPos.getRow()) && (endPos.getColumn() == kingPos.getColumn())){ // for some reason doing endPos == kingPos is not working
                     return true;
                 }
             }
