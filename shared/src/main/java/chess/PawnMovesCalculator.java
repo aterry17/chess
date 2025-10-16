@@ -30,11 +30,11 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
         else {
             throw new RuntimeException("Team Color has not been properly set");
         }
-        var listOfMoves = pawnMoves(teamColor, board, startRow, startPos, oneUpPos, twoUpPos, captLeftPos, captRightPos);
+        var listOfMoves = pM(teamColor, board, startRow, startPos, oneUpPos, twoUpPos, captLeftPos, captRightPos);
         return listOfMoves;
     }
 
-    public Collection<ChessMove> pawnMoves (ChessGame.TeamColor tC, ChessBoard b, int sR, ChessPosition sP, ChessPosition p1, ChessPosition p2, ChessPosition pL, ChessPosition pR){
+    public Collection<ChessMove> pM(ChessGame.TeamColor tC, ChessBoard b, int sR, ChessPosition sP, ChessPosition p1, ChessPosition p2, ChessPosition pL, ChessPosition pR){
         Collection<ChessMove> listOfMoves = new ArrayList<ChessMove>();
         if(isPosOnBoard(p1) && isPosEmpty(b, p1)){
             // move up two for starting row
