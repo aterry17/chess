@@ -1,5 +1,7 @@
 package dataaccess;
 
+import model.UserData;
+
 public class MemUserDAO implements UserDAO{
     @Override
     public void clear() {
@@ -13,6 +15,11 @@ public class MemUserDAO implements UserDAO{
 
     @Override
     public void getUser() {
+
+    }
+
+    @Override
+    public void insertUser(UserData u) throws DataAccessException {
 
     }
 }
