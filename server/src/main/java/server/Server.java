@@ -1,6 +1,8 @@
 package server;
 
 import io.javalin.*;
+import io.javalin.http.Context;
+
 import java.util.UUID;
 
 public class Server {
@@ -12,6 +14,9 @@ public class Server {
 
         // Register your endpoints and exception handlers here.
 
+        /// Register
+        Javalin.create()
+                .post("/user{ \"username\":\"\", \"password\":\"\", \"email\":\"\" }", context -> register(context));
     }
 
     public int run(int desiredPort) {
@@ -23,10 +28,14 @@ public class Server {
         javalin.stop();
     }
 
-
-
     // method to generate authToken
-    public static String generateToken() {
+    private static String generateToken() {
         return UUID.randomUUID().toString();
     }
+
+    private void register(Context context) {
+        // do some register stuff
+        new Handler().handleRequest(context);
+    }
 }
+

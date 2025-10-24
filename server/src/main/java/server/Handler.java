@@ -1,5 +1,9 @@
 package server;
 
+import io.javalin.http.Context;
+import model.RegisterResult;
+import service.Service;
+
 public class Handler {
 
     /// example from class slides:
@@ -19,6 +23,13 @@ public class Handler {
     // send http response back to client
 
     //
+
+    public RegisterResult handleRequest(Context context){
+        // this should be returning a RegisterResult to the server?
+        RegisterResult result = Service.register(context); // call the service
+        return result;
+//        return new RegisterResult("test_username", "test_authtoken");
+    }
 
 
 }

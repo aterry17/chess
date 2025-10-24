@@ -7,9 +7,9 @@ public class Main {
         server.run(8080);
 
 
-        // trying a simple example
-        MemUserDAO userDAO = new MemUserDAO();
-        var service = new UserService();
+       /// trying a simple example
+//        MemUserDAO userDAO = new MemUserDAO();
+//        var service = new UserService();
 
         System.out.println("♕ 240 Chess Server");
     }
