@@ -1,7 +1,11 @@
 package service;
 
-public class UserService {
+public class Service {
+
+
+
+    /// example
 //    public RegisterResult register(RegisterRequest registerRequest){}
 //    public LoginResult login(LoginRequest loginRequest){}
-//    public void logout(LogoutRequest logoutRequest){}
+//    public
 }
