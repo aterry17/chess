@@ -7,8 +7,6 @@ import model.RegisterRequest;
 import model.RegisterResult;
 import service.Service;
 
-import java.io.Reader;
-
 public class Handler {
 
     /// example from class slides:
@@ -30,12 +28,10 @@ public class Handler {
     public void handleRequest(Context context) throws DataAccessException {
 
         Gson gson = new Gson();
-        RegisterRequest request = gson.fromJson(context.body(), RegisterRequest.class); // IntelliJ says context by itself is not good
+        RegisterRequest request = gson.fromJson(context.body(), RegisterRequest.class);
         Service service = new Service();
-        RegisterResult result = service.register(request); // call the service
-        context.result(gson.toJson(result));
-//        return null;
-//        return gson.toJson(result);
+        RegisterResult regResult = service.register(request);
+        context.result(gson.toJson(regResult));
     }
 
 
