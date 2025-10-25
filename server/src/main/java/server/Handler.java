@@ -1,8 +1,13 @@
 package server;
 
+import com.google.gson.Gson;
+import dataaccess.DataAccessException;
 import io.javalin.http.Context;
+import model.RegisterRequest;
 import model.RegisterResult;
 import service.Service;
+
+import java.io.Reader;
 
 public class Handler {
 
@@ -11,8 +16,6 @@ public class Handler {
 //    LoginService service = new LoginService();
 //    LoginResult result = service.login(request);
 //    return gson.toJson(result);
-//
-
 
     /// example of what a handler needs to do:
     // validate the auth token
@@ -24,11 +27,13 @@ public class Handler {
 
     //
 
-    public RegisterResult handleRequest(Context context){
-        // this should be returning a RegisterResult to the server?
-        RegisterResult result = Service.register(context); // call the service
-        return result;
-//        return new RegisterResult("test_username", "test_authtoken");
+    public String handleRequest(Context context) throws DataAccessException {
+
+        Gson gson = new Gson();
+        RegisterRequest request = gson.fromJson(context.toString(), RegisterRequest.class); // IntelliJ says context by itself is not good
+        Service service = new Service();
+        RegisterResult result = service.register(request); // call the service
+        return gson.toJson(result);
     }
 
 

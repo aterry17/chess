@@ -1,5 +1,6 @@
 package server;
 
+import dataaccess.DataAccessException;
 import io.javalin.*;
 import io.javalin.http.Context;
 
@@ -16,7 +17,7 @@ public class Server {
 
         /// Register
         Javalin.create()
-                .post("/user{ \"username\":\"\", \"password\":\"\", \"email\":\"\" }", context -> register(context));
+                .post("/user{ \"username\":\"\", \"password\":\"\", \"email\":\"\" }", this::register);
     }
 
     public int run(int desiredPort) {
@@ -33,8 +34,7 @@ public class Server {
         return UUID.randomUUID().toString();
     }
 
-    private void register(Context context) {
-        // do some register stuff
+    private void register(Context context) throws DataAccessException {
         new Handler().handleRequest(context);
     }
 }
