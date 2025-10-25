@@ -27,13 +27,15 @@ public class Handler {
 
     //
 
-    public String handleRequest(Context context) throws DataAccessException {
+    public void handleRequest(Context context) throws DataAccessException {
 
         Gson gson = new Gson();
-        RegisterRequest request = gson.fromJson(context.toString(), RegisterRequest.class); // IntelliJ says context by itself is not good
+        RegisterRequest request = gson.fromJson(context.body(), RegisterRequest.class); // IntelliJ says context by itself is not good
         Service service = new Service();
         RegisterResult result = service.register(request); // call the service
-        return gson.toJson(result);
+        context.result(gson.toJson(result));
+//        return null;
+//        return gson.toJson(result);
     }
 
 

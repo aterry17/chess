@@ -16,8 +16,8 @@ public class Server {
         // Register your endpoints and exception handlers here.
 
         /// Register
-        Javalin.create()
-                .post("/user{ \"username\":\"\", \"password\":\"\", \"email\":\"\" }", this::register);
+        javalin
+                .post("/user", this::register);
     }
 
     public int run(int desiredPort) {
