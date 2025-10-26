@@ -6,7 +6,8 @@ import io.javalin.http.Context;
 import model.RegisterRequest;
 import model.RegisterResult;
 import model.UserData;
-import org.eclipse.jetty.server.Authentication;
+
+import java.util.UUID;
 
 public class Service {
 
@@ -17,6 +18,9 @@ public class Service {
 //    public LoginResult login(LoginRequest loginRequest){}
 //    public
 
+    private static String generateToken() {
+        return UUID.randomUUID().toString();
+    }
 
     public RegisterResult register(RegisterRequest request) throws DataAccessException {
         // to-add: check memory for username & throw exception if username already exists
@@ -27,7 +31,7 @@ public class Service {
         MemUserDAO mem = new MemUserDAO();
         var user = new UserData(request.username(), request.password(), request.email());
         mem.createUser(user);
-        return new RegisterResult("test_u", "test_a");
+        return new RegisterResult(user.username(), generateToken());
     }
 }
 

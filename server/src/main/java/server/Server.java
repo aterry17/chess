@@ -29,9 +29,9 @@ public class Server {
     }
 
     // method to generate authToken
-    private static String generateToken() {
-        return UUID.randomUUID().toString();
-    }
+//    private static String generateToken() {
+//        return UUID.randomUUID().toString();
+//    }
 
     private void register(Context context) throws DataAccessException {
         new Handler().handleRequest(context);
