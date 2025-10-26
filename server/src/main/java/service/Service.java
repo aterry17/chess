@@ -11,25 +11,25 @@ import java.util.UUID;
 
 public class Service {
 
-
-
-    /// example
-//    public RegisterResult register(RegisterRequest registerRequest){}
-//    public LoginResult login(LoginRequest loginRequest){}
-//    public
+    private MemUserDAO mem = new MemUserDAO();
 
     private static String generateToken() {
         return UUID.randomUUID().toString();
     }
 
     public RegisterResult register(RegisterRequest request) throws DataAccessException {
-        // to-add: check memory for username & throw exception if username already exists
+
 
         // assuming that username is free:
-
         // RegisterRequest has same format as UserData
-        MemUserDAO mem = new MemUserDAO();
+//        MemUserDAO mem = new MemUserDAO(); // putting this up top
+
         var user = new UserData(request.username(), request.password(), request.email());
+        // check to see if username already exists
+        if(mem.getUser(user) != null){
+            throw new DataAccessException("Username already exists");
+        }
+
         mem.createUser(user);
         return new RegisterResult(user.username(), generateToken());
     }

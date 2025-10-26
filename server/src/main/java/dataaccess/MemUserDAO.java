@@ -9,21 +9,16 @@ public class MemUserDAO implements UserDAO{
 
     @Override
     public void clear() {
+        database = new HashMap<>();
+    }
 
+    @Override
+    public String getUser(UserData u) { // right now only returning username
+        return u.username();
     }
 
     @Override
     public void createUser(UserData u) {
-
-    }
-
-    @Override
-    public void getUser() {
-
-    }
-
-    @Override
-    public void insertUser(UserData u) throws DataAccessException {
         database.put(u.username(), u);
 
     }
