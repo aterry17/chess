@@ -25,14 +25,12 @@ public class Handler {
 
     //
 
-    public void handleRequest(Context context) throws DataAccessException {
+    public void handleRequest(Service service, Context context) throws DataAccessException {
 
         Gson gson = new Gson();
         RegisterRequest request = gson.fromJson(context.body(), RegisterRequest.class);
-        Service service = new Service();
         RegisterResult regResult = service.register(request);
         context.result(gson.toJson(regResult));
     }
-
 
 }
