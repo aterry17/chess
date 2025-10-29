@@ -1,5 +1,6 @@
 package service;
 
+import dataaccess.AlreadyTaken403Exception;
 import dataaccess.DataAccessException;
 import dataaccess.MemUserDAO;
 import io.javalin.http.Context;
@@ -11,7 +12,11 @@ import java.util.UUID;
 
 public class Service {
 
-    private MemUserDAO mem = new MemUserDAO();
+    private final MemUserDAO mem;
+    public Service(MemUserDAO mem) {
+        this.mem = mem;
+    }
+//    private MemUserDAO mem = new MemUserDAO();
 
     private static String generateToken() {
         return UUID.randomUUID().toString();
@@ -27,7 +32,7 @@ public class Service {
         var user = new UserData(request.username(), request.password(), request.email());
         // check to see if username already exists
         if(mem.getUser(user) != null){
-            throw new DataAccessException("Username already exists");
+            throw new AlreadyTaken403Exception("");
         }
 
         mem.createUser(user);

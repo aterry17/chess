@@ -1,6 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
+import dataaccess.BadRequest400Exception;
 import dataaccess.DataAccessException;
 import io.javalin.http.Context;
 import model.RegisterRequest;
@@ -25,14 +26,17 @@ public class Handler {
 
     //
 
-    public void handleRequest(Context context) throws DataAccessException {
+    public void handleRequest(Service service, Context context) throws DataAccessException {
 
         Gson gson = new Gson();
-        RegisterRequest request = gson.fromJson(context.body(), RegisterRequest.class);
-        Service service = new Service();
+        RegisterRequest request;
+        try {
+            request = gson.fromJson(context.body(), RegisterRequest.class);
+        } catch (RuntimeException e){
+            throw new BadRequest400Exception(""); // request is only going to throw an error if the request is bad -- pretty sure
+        }
         RegisterResult regResult = service.register(request);
         context.result(gson.toJson(regResult));
     }
-
 
 }
