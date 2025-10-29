@@ -1,3 +1,4 @@
+import dataaccess.AlreadyTaken403Exception;
 import dataaccess.DataAccessException;
 import dataaccess.MemUserDAO;
 import service.Service;
@@ -22,7 +23,15 @@ public class service {
 
     @Test
     public void registerNegativeTest(){
-
+        Service service = new Service(new MemUserDAO());
+        try {
+            service.register(new RegisterRequest("user1", "pass1", "email1")); // register the user the first time
+            assertThrows(AlreadyTaken403Exception.class, () -> {
+                service.register(new RegisterRequest("user1", "pass1", "email1"));
+            });
+        } catch (DataAccessException e){
+            fail("service.register threw an unexpected DataAccessException");
+        }
     }
 
 
