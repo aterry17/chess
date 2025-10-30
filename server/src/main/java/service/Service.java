@@ -39,7 +39,9 @@ public class Service {
         else if (!user.password().equals(request.password())){
             throw new Unauthorized401Exception("");
         }
-        return new LoginResult(user.username(), generateToken());
+        var authtoken = generateToken();
+        memAuth.createAuth();
+        return new LoginResult(user.username(), authtoken);
     }
 
     public EmptyResult logout(LogoutRequest request) throws DataAccessException {
