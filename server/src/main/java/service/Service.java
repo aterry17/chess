@@ -1,12 +1,7 @@
 package service;
 
-import dataaccess.AlreadyTaken403Exception;
-import dataaccess.DataAccessException;
-import dataaccess.MemUserDAO;
-import io.javalin.http.Context;
-import model.RegisterRequest;
-import model.RegisterResult;
-import model.UserData;
+import dataaccess.*;
+import model.*;
 
 import java.util.UUID;
 
@@ -23,20 +18,24 @@ public class Service {
     }
 
     public RegisterResult register(RegisterRequest request) throws DataAccessException {
-
-
-        // assuming that username is free:
-        // RegisterRequest has same format as UserData
-//        MemUserDAO mem = new MemUserDAO(); // putting this up top
-
         var user = new UserData(request.username(), request.password(), request.email());
         // check to see if username already exists
-        if(mem.getUser(user) != null){
+        if(mem.getUsername(user) != null){
             throw new AlreadyTaken403Exception("");
         }
-
         mem.createUser(user);
         return new RegisterResult(user.username(), generateToken());
+    }
+
+    public LoginResult login(LoginRequest request) throws DataAccessException {
+        var user = mem.getUser(request.username());
+        if (user == null){
+            throw new BadRequest400Exception("");
+        }
+        else if (!user.password().equals(request.password())){
+            throw new Unauthorized401Exception("");
+        }
+        return new LoginResult(user.username(), generateToken());
     }
 }
 

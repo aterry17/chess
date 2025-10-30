@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import dataaccess.BadRequest400Exception;
 import dataaccess.DataAccessException;
 import io.javalin.http.Context;
+import model.LoginRequest;
+import model.LoginResult;
 import model.RegisterRequest;
 import model.RegisterResult;
 import service.Service;
@@ -27,7 +29,6 @@ public class Handler {
     //
 
     public void handleRequest(Service service, Context context) throws DataAccessException {
-
         Gson gson = new Gson();
         RegisterRequest request;
         try {
@@ -37,6 +38,22 @@ public class Handler {
         }
         RegisterResult regResult = service.register(request);
         context.result(gson.toJson(regResult));
+    }
+
+    public void handleLoginRequest(Service service, Context context) throws DataAccessException{
+        Gson gson = new Gson();
+        LoginRequest request;
+        try {
+            request = gson.fromJson(context.body(), LoginRequest.class);
+        } catch (RuntimeException e){
+            throw new BadRequest400Exception(""); // request is only going to throw an error if the request is bad -- pretty sure
+        }
+        LoginResult logResult = service.login(request);
+        context.result(gson.toJson(logResult));
+    }
+
+    public void handleLogoutRequest(Service service, Context context) throws DataAccessException{
+
     }
 
 }

@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import dataaccess.*;
 import io.javalin.*;
 import io.javalin.http.Context;
+import model.AuthData;
 import service.Service;
 
+import javax.xml.crypto.Data;
 import java.util.Map;
 import java.util.UUID;
 
@@ -28,6 +30,7 @@ public class Server {
 
         /// register endpoint
         javalin.post("/user", this::register)
+                .post("/session", this::login)
                 .exception(DataAccessException.class, this:: exceptionHandler)
                 .error(404, this::notFound);
         ///  exception handlers round 2 :)
@@ -78,5 +81,16 @@ public class Server {
     private void register(Context context) throws DataAccessException {
         new Handler().handleRequest(service, context);
     }
+
+    private void clear(Context context){
+        // clear all users, games, authTokens --> completely wipes the database
+        /// will do this last
+    }
+
+    private void login(Context context) throws DataAccessException{
+        new Handler().handleLoginRequest(service, context);
+    }
+
+
 }
 

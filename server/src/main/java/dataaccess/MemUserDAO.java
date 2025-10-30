@@ -13,7 +13,7 @@ public class MemUserDAO implements UserDAO{
     }
 
     @Override
-    public String getUser(UserData u) { // right now only returning username
+    public String getUsername(UserData u) { // right now only returning username
         if (database.get(u.username()) != null){
             return u.username();
         }
@@ -25,6 +25,10 @@ public class MemUserDAO implements UserDAO{
     @Override
     public void createUser(UserData u) {
         database.put(u.username(), u);
+    }
+
+    public UserData getUser(String username){
+        return database.get(username);
     }
 
     public void deleteUser(UserData u){
