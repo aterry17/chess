@@ -4,11 +4,10 @@ import com.google.gson.Gson;
 import dataaccess.BadRequest400Exception;
 import dataaccess.DataAccessException;
 import io.javalin.http.Context;
-import model.LoginRequest;
-import model.LoginResult;
-import model.RegisterRequest;
-import model.RegisterResult;
+import model.*;
 import service.Service;
+
+import java.util.HashSet;
 
 public class Handler {
 
@@ -53,7 +52,22 @@ public class Handler {
     }
 
     public void handleLogoutRequest(Service service, Context context) throws DataAccessException{
+        Gson gson = new Gson();
+        LogoutRequest request;
+        try {
+            request = gson.fromJson(context.body(), LogoutRequest.class);
+        } catch (RuntimeException e){
+            throw new BadRequest400Exception(""); // request is only going to throw an error if the request is bad -- pretty sure
+        }
+        EmptyResult logResult = service.logout(request);
+        context.result(gson.toJson(logResult));
+    }
 
+    private boolean authorized(Context context) {
+//        private HashSet<String> validTokens = new HashSet<>();
+//        String authtoken = context.header("authorization");
+//        if (!validTokens.contains(authtoken))
+        return false;
     }
 
 }

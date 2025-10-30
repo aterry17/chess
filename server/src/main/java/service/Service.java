@@ -7,9 +7,13 @@ import java.util.UUID;
 
 public class Service {
 
-    private final MemUserDAO mem;
-    public Service(MemUserDAO mem) {
-        this.mem = mem;
+    private final MemUserDAO memUser;
+    private final MemAuthDAO memAuth;
+    private final MemGameDAO memGame;
+    public Service(MemUserDAO memUser, MemAuthDAO memAuth, MemGameDAO memGame) {
+        this.memUser = memUser;
+        this.memAuth = memAuth;
+        this.memGame = memGame;
     }
 //    private MemUserDAO mem = new MemUserDAO();
 
@@ -20,15 +24,15 @@ public class Service {
     public RegisterResult register(RegisterRequest request) throws DataAccessException {
         var user = new UserData(request.username(), request.password(), request.email());
         // check to see if username already exists
-        if(mem.getUsername(user) != null){
+        if(memUser.getUsername(user) != null){
             throw new AlreadyTaken403Exception("");
         }
-        mem.createUser(user);
+        memUser.createUser(user);
         return new RegisterResult(user.username(), generateToken());
     }
 
     public LoginResult login(LoginRequest request) throws DataAccessException {
-        var user = mem.getUser(request.username());
+        var user = memUser.getUser(request.username());
         if (user == null){
             throw new BadRequest400Exception("");
         }
@@ -37,5 +41,10 @@ public class Service {
         }
         return new LoginResult(user.username(), generateToken());
     }
+
+    public EmptyResult logout(LogoutRequest request) throws DataAccessException {
+
+    }
+
 }
 

@@ -17,7 +17,7 @@ public class Server {
     private final Service service;
 
     public Server() {
-        this(new Service(new MemUserDAO()));
+        this(new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO()));
     }
 
 
@@ -89,6 +89,10 @@ public class Server {
 
     private void login(Context context) throws DataAccessException{
         new Handler().handleLoginRequest(service, context);
+    }
+
+    private void logout(Context context) throws DataAccessException{
+        new Handler().handleLogoutRequest(service, context);
     }
 
 
