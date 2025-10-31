@@ -87,4 +87,20 @@ public class Handler {
             context.result(gson.toJson(createResult));
         }
     }
+
+    public void handleJoinGameRequest(Service service, Context context) throws DataAccessException{
+        if (service.authorized(context)) {
+            Gson gson = new Gson();
+            JoinGameRequest request;
+            String authtoken;
+            try{
+                authtoken = context.header("authorization");
+                request = gson.fromJson(context.body(), JoinGameRequest.class);
+            } catch (RuntimeException e) {
+                throw new BadRequest400Exception("");
+            }
+            EmptyResult joinResult = service.joinGame(request, authtoken);
+            context.result(gson.toJson(joinResult));
+        }
+    }
 }

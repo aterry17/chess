@@ -42,4 +42,13 @@ public class MemAuthDAO implements AuthDAO{
             }
         } return false;
     }
+
+    public String getUsername(String authtoken){
+        Iterator<AuthData> it = database.iterator();
+        while(it.hasNext()) {
+            var data = it.next();
+            if(data.authtoken().equals(authtoken)){
+                return data.username();
+            }
+    }
 }

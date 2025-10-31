@@ -58,10 +58,18 @@ public class Service {
         return new ListGamesResult(memGame.listGames());
     }
 
-    public CreateGameResult createGame(CreateGameRequest request){
+    public CreateGameResult createGame(CreateGameRequest request) throws DataAccessException {
         String ID = memGame.generateGameID();
+
+        // throw data access exception if game name already exists
         memGame.createGame(request.gameName(), ID);
         return new CreateGameResult(ID);
+    }
+
+    public EmptyResult joinGame(JoinGameRequest request, String authtoken) throws DataAccessException {
+        String username = memAuth.getUsername(authtoken);
+        memGame.updateGame(request.playerColor(), username, request.gameID());
+        return new EmptyResult();
     }
 
     /// from the web-api.md in instruction/web-api/

@@ -106,6 +106,11 @@ public class Server {
         new Handler().handleCreateGameRequest(service, context);
     }
 
+    private void joinGame(Context context) throws DataAccessException{
+        new Handler().handleJoinGameRequest(service, context);
+    }
+
+
 
 }
 
