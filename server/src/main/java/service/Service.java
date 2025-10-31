@@ -48,10 +48,20 @@ public class Service {
         return new LoginResult(user.username(), authtoken);
     }
 
-    public EmptyResult logout(LogoutRequest request) throws DataAccessException {
+    public EmptyResult logout(String authtoken) throws DataAccessException {
         // assuming that the handler took care of unauthorized, just remove the AuthData
-        memAuth.deleteAuth(request.authtoken());
+        memAuth.deleteAuth(authtoken);
         return new EmptyResult();
+    }
+
+    public ListGamesResult listGames() throws DataAccessException {
+        return new ListGamesResult(memGame.listGames());
+    }
+
+    public CreateGameResult createGame(CreateGameRequest request){
+        String ID = memGame.generateGameID();
+        memGame.createGame(request.gameName(), ID);
+        return new CreateGameResult(ID);
     }
 
     /// from the web-api.md in instruction/web-api/

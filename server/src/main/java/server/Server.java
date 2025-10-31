@@ -31,7 +31,9 @@ public class Server {
         /// register endpoint
         javalin.post("/user", this::register)
                 .post("/session", this::login)
-                .post("/session", this::logout)
+                .delete("/session", this::logout)
+                .get("/game", this::listGames)
+                .post("/game", this::createGame)
                 .exception(DataAccessException.class, this:: exceptionHandler)
                 .error(404, this::notFound);
         ///  exception handlers round 2 :)
@@ -94,6 +96,14 @@ public class Server {
 
     private void logout(Context context) throws DataAccessException{
         new Handler().handleLogoutRequest(service, context);
+    }
+
+    private void listGames(Context context) throws DataAccessException{
+        new Handler().handleListGamesRequest(service, context);
+    }
+
+    private void createGame(Context context) throws DataAccessException {
+        new Handler().handleCreateGameRequest(service, context);
     }
 
 

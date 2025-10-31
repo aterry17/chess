@@ -55,17 +55,36 @@ public class Handler {
     public void handleLogoutRequest(Service service, Context context) throws DataAccessException{
         if (service.authorized(context)) {
             Gson gson = new Gson();
-            LogoutRequest request;
+            String authtoken;
             try {
-                request = gson.fromJson(context.body(), LogoutRequest.class);
+                authtoken = context.header("authorization");
             } catch (RuntimeException e) {
                 throw new BadRequest400Exception(""); // request is only going to throw an error if the request is bad -- pretty sure
             }
-            EmptyResult logResult = service.logout(request);
+            EmptyResult logResult = service.logout(authtoken);
             context.result(gson.toJson(logResult));
         }
     }
 
+    public void handleListGamesRequest(Service service, Context context) throws DataAccessException {
+        if (service.authorized(context)) {
+            Gson gson = new Gson();
+            ListGamesResult listResult = service.listGames();
+            context.result(gson.toJson(listResult));
+        }
+    }
 
-
+    public void handleCreateGameRequest(Service service, Context context) throws DataAccessException{
+        if (service.authorized(context)) {
+            Gson gson = new Gson();
+            CreateGameRequest request;
+            try {
+                request = gson.fromJson(context.body(), CreateGameRequest.class);
+            } catch (RuntimeException e){
+                throw new BadRequest400Exception(""); // request is only going to throw an error if the request is bad -- pretty sure
+            }
+            CreateGameResult createResult = service.createGame(request);
+            context.result(gson.toJson(createResult));
+        }
+    }
 }

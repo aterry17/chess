@@ -1,9 +1,14 @@
 package dataaccess;
 
+import model.GameData;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public interface GameDAO {
     void clear();
-    void createGame();
+    void createGame(String gameName, String ID);
     void getGame();
-    void listGames();
-    void updateGame();
+    ArrayList<GameData> listGames();
+    void updateGame(String playerColor, String playerUsername, String gameID);
 }
