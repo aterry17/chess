@@ -31,6 +31,7 @@ public class Server {
         /// register endpoint
         javalin.post("/user", this::register)
                 .post("/session", this::login)
+                .post("/session", this::logout)
                 .exception(DataAccessException.class, this:: exceptionHandler)
                 .error(404, this::notFound);
         ///  exception handlers round 2 :)

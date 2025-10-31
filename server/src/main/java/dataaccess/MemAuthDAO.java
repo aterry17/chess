@@ -23,13 +23,23 @@ public class MemAuthDAO implements AuthDAO{
     }
 
     @Override
-    public void deleteAuth(String username) {
+    public void deleteAuth(String authtoken) {
         Iterator<AuthData> it = database.iterator();
         while(it.hasNext()) {
             AuthData data = it.next();
-            if (data.username().equals(username)){
+            if (data.authtoken().equals(authtoken)){
                 it.remove();
             }
         }
+    }
+
+    public boolean containsAuth(String authtoken){
+        Iterator<AuthData> it = database.iterator();
+        while(it.hasNext()) {
+            var data = it.next();
+            if(data.authtoken().equals(authtoken)){
+                return true;
+            }
+        } return false;
     }
 }
