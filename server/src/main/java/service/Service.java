@@ -134,6 +134,7 @@ public class Service {
 //        return true;
 
         /// new way -- helped a few more tests pass
+        // we're still getting 401s thrown more often than they should be
         if (authToken == null){
             throw new BadRequest400Exception("");
         } if (!memAuth.containsAuth(authToken)){
