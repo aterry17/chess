@@ -1,14 +1,16 @@
 package dataaccess;
 
 import model.AuthData;
-import model.UserData;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class MemAuthDAO implements AuthDAO{
-    final private HashSet<AuthData> database= new HashSet<>();
+public class MemAuthDAO implements AuthDAO {
+    final private HashSet<AuthData> database = new HashSet<>();
+
+    public void clear(){
+        database.clear();
+    }
 
 
     @Override
@@ -25,30 +27,33 @@ public class MemAuthDAO implements AuthDAO{
     @Override
     public void deleteAuth(String authtoken) {
         Iterator<AuthData> it = database.iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             AuthData data = it.next();
-            if (data.authtoken().equals(authtoken)){
+            if (data.authToken().equals(authtoken)) {
                 it.remove();
             }
         }
     }
 
-    public boolean containsAuth(String authtoken){
+    public boolean containsAuth(String authToken) {
         Iterator<AuthData> it = database.iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             var data = it.next();
-            if(data.authtoken().equals(authtoken)){
+            if (data.authToken().equals(authToken)) {
                 return true;
             }
-        } return false;
+        }
+        return false;
     }
 
-    public String getUsername(String authtoken){
+    public String getUsername(String authtoken) {
         Iterator<AuthData> it = database.iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             var data = it.next();
-            if(data.authtoken().equals(authtoken)){
+            if (data.authToken().equals(authtoken)) {
                 return data.username();
             }
+        }
+        return null;
     }
 }

@@ -12,7 +12,7 @@ public class MemGameDAO implements GameDAO{
     private final HashMap<String, GameData> database = new HashMap<>();
     @Override
     public void clear() {
-
+        database.clear();
     }
 
     @Override
@@ -21,8 +21,8 @@ public class MemGameDAO implements GameDAO{
     }
 
     @Override
-    public void getGame() {
-
+    public GameData getGame(String ID) {
+        return database.get(ID);
     }
 
     @Override
@@ -45,11 +45,19 @@ public class MemGameDAO implements GameDAO{
             String whiteUsername = database.get(gameID).whiteUsername();
             database.put(gameID, new GameData(gameID, whiteUsername, playerUsername, gameName));
         }
-
     }
     public String generateGameID(){
         // generate an integer 1000-9999
         Random rand = new Random();
         return String.valueOf(rand.nextInt(1000,10000));
+    }
+
+    public boolean validGameID(String ID) {
+        for (String gameName : database.keySet()) {
+            if (database.get(gameName).gameID().equals(ID)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

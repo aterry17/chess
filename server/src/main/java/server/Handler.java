@@ -28,7 +28,7 @@ public class Handler {
 
     //
 
-    public void handleRequest(Service service, Context context) throws DataAccessException {
+    public void handleRegisterRequest(Service service, Context context) throws DataAccessException {
         Gson gson = new Gson();
         RegisterRequest request;
         try {
@@ -102,5 +102,11 @@ public class Handler {
             EmptyResult joinResult = service.joinGame(request, authtoken);
             context.result(gson.toJson(joinResult));
         }
+    }
+
+    public void handleClearRequest(Service service, Context context) throws DataAccessException{
+            Gson gson = new Gson();
+            EmptyResult clearResult = service.clear();
+            context.result(gson.toJson(clearResult));
     }
 }
