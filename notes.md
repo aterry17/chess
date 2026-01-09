@@ -1,1 +1,1 @@
-notes for the chess project which will be a fantastic use of time and mental energy
+start of chess240 round 2!
