@@ -57,7 +57,7 @@ public class Handler {
             Gson gson = new Gson();
             String authtoken;
             try {
-                authtoken = context.header("authorization");
+                authtoken = context.header("Authorization");
             } catch (RuntimeException e) {
                 throw new BadRequest400Exception(""); // request is only going to throw an error if the request is bad -- pretty sure
             }

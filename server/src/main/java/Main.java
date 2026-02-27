@@ -7,11 +7,7 @@ import service.Service;
 public class Main {
     public static void main(String[] args) {
 
-        MemUserDAO userDAO = new MemUserDAO();
-        MemAuthDAO authDAO = new MemAuthDAO();
-        MemGameDAO gameDAO = new MemGameDAO();
-        var service = new Service(userDAO, authDAO, gameDAO);
-        Server server = new Server(service);
+        Server server = new Server();
         server.run(8080);
 
         System.out.println("♕ 240 Chess Server");

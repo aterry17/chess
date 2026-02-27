@@ -41,7 +41,9 @@ public class Service {
             throw new AlreadyTaken403Exception("");
         }
         memUser.createUser(user);
-        return new RegisterResult(user.username(), generateToken());
+        String authtoken = generateToken();
+        memAuth.insertAuth(authtoken, user.username());
+        return new RegisterResult(user.username(), authtoken);
     }
 
     public LoginResult login(LoginRequest request) throws DataAccessException {

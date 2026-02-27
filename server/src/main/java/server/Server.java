@@ -10,15 +10,10 @@ import java.util.Map;
 public class Server {
 
     private final Javalin javalin;
-    private final Service service;
+    private final Service service = new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO());
+
 
     public Server() {
-        this(new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO()));
-    }
-
-
-    public Server(Service service) {
-        this.service = service;
 
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
