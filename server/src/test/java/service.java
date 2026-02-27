@@ -39,7 +39,7 @@ public class service {
         try {
             service.register(new RegisterRequest("user1", "pass1", "email1"));
             LoginResult result = service.login(new LoginRequest("user1", "pass1"));
-            assertEquals(result.username(), "user1");
+            assertEquals("user1", result.username());
         } catch (DataAccessException e){
             fail("service.register threw an unexpected DataAccessException");
         }
@@ -66,7 +66,7 @@ public class service {
             var loginresult = service.login(new LoginRequest("user1", "pass1"));
             String authtoken = loginresult.authToken();
             EmptyResult result =  service.logout(authtoken);
-            assertEquals(result, new EmptyResult());
+            assertEquals(new EmptyResult(), result);
         } catch (DataAccessException e){
             fail("service.register threw an unexpected DataAccessException");
         }
@@ -86,8 +86,12 @@ public class service {
 //            service.register(new RegisterRequest(user.username(), user.password(), user.email()));
 //            service.login(new LoginRequest(user.username(), user.password()));
 //            String userauthtoken =
-            assertThrows(Exception.class, () -> {
-                service.logout(""); // need the authtoken
+
+//            assertThrows(Unauthorized401Exception.class, () -> {
+//                service.login(new LoginRequest("user1", "pass_wrong"));
+
+            assertThrows(Unauthorized401Exception.class, () -> {
+                service.logout("bad"); // need the authtoken
             });
         } catch (DataAccessException e){
             fail("service.register threw an unexpected DataAccessException");
