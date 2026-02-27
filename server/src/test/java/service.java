@@ -12,7 +12,9 @@ public class service {
         // check to see that the register result properly sent with the correct username
         try {
             var result = service.register(new RegisterRequest("user1", "pass1", "email1"));
-            assertEquals(result.username(), "user1");
+//            assertEquals(result.username(), "user1"); -- apparently incorrect parameter order
+            assertEquals("user1", result.username());
+
         } catch (DataAccessException e){
             fail("service.register threw an unexpected DataAccessException");
         }
@@ -74,16 +76,22 @@ public class service {
     /// FIX THIS
     @Test
     public void logoutNegativeTest(){
-//        Service service = new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO());
-//        try {
-//            service.register(new RegisterRequest("user1", "pass1", "email1"));
-//            service.login(new LoginRequest("user1", "pass1"));
-//            assertThrows(Exception.class, () -> {
-//                service.logout(); // can't call logout w/ empty parameters?
-//            });
-//        } catch (DataAccessException e){
-//            fail("service.register threw an unexpected DataAccessException");
-//        }
+        Service service = new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO());
+        UserData user = new UserData("user1", "pass1", "email1");
+        try {
+            service.register(new RegisterRequest("user1", "pass1", "email1"));
+            service.login(new LoginRequest("user1", "pass1"));
+//
+//            a new idea:
+//            service.register(new RegisterRequest(user.username(), user.password(), user.email()));
+//            service.login(new LoginRequest(user.username(), user.password()));
+//            String userauthtoken =
+            assertThrows(Exception.class, () -> {
+                service.logout(""); // need the authtoken
+            });
+        } catch (DataAccessException e){
+            fail("service.register threw an unexpected DataAccessException");
+        }
     }
 
     @Test

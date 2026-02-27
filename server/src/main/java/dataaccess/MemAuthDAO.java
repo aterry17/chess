@@ -40,7 +40,7 @@ public class MemAuthDAO implements AuthDAO {
         Iterator<AuthData> it = database.iterator();
         while (it.hasNext()) {
             var data = it.next();
-            if (data.authToken().equals(authToken)) {
+            if (data.authToken().equals(authToken)) { // this is likely the problem line -- it's not finding some authtokens
                 return true;
             }
         }
