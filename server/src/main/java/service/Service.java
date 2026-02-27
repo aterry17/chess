@@ -1,11 +1,11 @@
 package service;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 import dataaccess.*;
 import io.javalin.http.Context;
 import model.*;
 
-import java.util.Map;
+//import java.util.Map;
 import java.util.UUID;
 
 public class Service {
@@ -79,7 +79,7 @@ public class Service {
     public CreateGameResult createGame(CreateGameRequest request) throws DataAccessException {
         //game name null
         if (request.gameName() == null){
-            throw new BadRequest400Exception("");
+            throw new Unauthorized401Exception (""); // changing this line from 400 to 401
         }
         String ID = memGame.generateGameID();
         // throw data access exception if game name already exists

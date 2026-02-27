@@ -30,7 +30,8 @@ public class MemAuthDAO implements AuthDAO {
         while (it.hasNext()) {
             AuthData data = it.next();
             if (data.authToken().equals(authtoken)) {
-                it.remove();
+                it.remove(); // is this going to lead to a concurrent modification error? since we're deleting something and then continuing to traverse the set?
+            // should we put in a break here so we're not messing with a concurrent modification error (see textbook pg.254)
             }
         }
     }
