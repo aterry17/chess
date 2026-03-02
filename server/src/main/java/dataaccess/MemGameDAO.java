@@ -27,9 +27,6 @@ public class MemGameDAO implements GameDAO{
     @Override
     public ArrayList<GameData> listGames() {
         var list = new ArrayList<GameData>();
-//        for (String game: database.keySet()) {
-//            list.add(database.get(game)); // I think this is trying to collect a list of string IDs when we should be getting a list of GameData??
-//        }
         for (String gameID: database.keySet()) {
             list.add(getGame(gameID));
         }
