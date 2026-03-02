@@ -92,8 +92,14 @@ public class Service {
     public EmptyResult joinGame(JoinGameRequest request, String authtoken) throws DataAccessException {
         //request w/o ID
         if (request.gameID() == null){
-            throw new BadRequest400Exception("");
+            throw new BadRequest400Exception("gameID was null");
         }
+        /// just added in the below:
+        //request w/o player color
+        if (request.playerColor() == null){
+            throw new BadRequest400Exception("playerColor was null");
+        }
+
         String username = memAuth.getUsername(authtoken);
         if (!memGame.validGameID(request.gameID())){
             throw new BadRequest400Exception("");
