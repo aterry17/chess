@@ -30,8 +30,4 @@ public class MemUserDAO implements UserDAO{
     public UserData getUser(String username){
         return database.get(username);
     }
-
-    public void deleteUser(UserData u){
-        database.remove(u.username());
-    }
 }

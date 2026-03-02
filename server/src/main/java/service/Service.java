@@ -83,10 +83,10 @@ public class Service {
         if (request.gameName() == null){
             throw new BadRequest400Exception(""); // changing this line from 401 to 400
         }
-        String ID = memGame.generateGameID();
+        String gameID = memGame.generateGameID();
         // throw data access exception if game name already exists
-        memGame.createGame(request.gameName(), ID);
-        return new CreateGameResult(ID);
+        memGame.createGame(request.gameName(), gameID);
+        return new CreateGameResult(gameID);
     }
 
     public EmptyResult joinGame(JoinGameRequest request, String authtoken) throws DataAccessException {

@@ -4,7 +4,6 @@ import model.GameData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 public class MemGameDAO implements GameDAO{
@@ -16,13 +15,13 @@ public class MemGameDAO implements GameDAO{
     }
 
     @Override
-    public void createGame(String gameName, String ID) {
-        database.put(ID, new GameData(ID, null, null, gameName));
+    public void createGame(String gameName, String gameID) {
+        database.put(gameID, new GameData(gameID, null, null, gameName));
     }
 
     @Override
-    public GameData getGame(String ID) {
-        return database.get(ID);
+    public GameData getGame(String gameID) {
+        return database.get(gameID);
     }
 
     @Override
@@ -55,9 +54,9 @@ public class MemGameDAO implements GameDAO{
         return String.valueOf(rand.nextInt(1000,10000));
     }
 
-    public boolean validGameID(String ID) {
+    public boolean validGameID(String gameID) {
         for (String gameName : database.keySet()) {
-            if (database.get(gameName).gameID().equals(ID)) {
+            if (database.get(gameName).gameID().equals(gameID)) {
                 return true;
             }
         }

@@ -2,11 +2,10 @@ package service;
 
 import dataaccess.*;
 import model.*;
-import org.eclipse.jetty.websocket.core.CoreSession;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class serviceTests {
+public class ServiceTests {
 
     @Test
     public void registerPositiveTest(){
