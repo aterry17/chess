@@ -1,10 +1,11 @@
+package service;
+
 import dataaccess.*;
 import model.*;
-import service.Service;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class service {
+public class serviceTests {
 
     @Test
     public void registerPositiveTest(){
@@ -100,16 +101,19 @@ public class service {
 
     @Test
     public void createGamePositiveTest(){
-//        Service service = new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO());
-//        try {
-//            service.register(new RegisterRequest("user1", "pass1", "email1"));
-//            service.login(new LoginRequest("user1", "pass1"));
-//            CreateGameResult result = service.createGame(new CreateGameRequest("game9000"));
-//
-//            assertEquals(result.gameID(), );
-//        } catch (DataAccessException e){
-//            fail("service.register threw an unexpected DataAccessException");
-//        }
+        Service service = new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO());
+        try {
+            service.register(new RegisterRequest("user1", "pass1", "email1"));
+            service.login(new LoginRequest("user1", "pass1"));
+            CreateGameResult result = service.createGame(new CreateGameRequest("game9000"));
+
+            assertNotNull(result.gameID(), "we couldn't find the game");
+//            System.out.println(result.gameID()); //put this in to check--there is a valid gammeID
+            assertNotNull(service.listGames(), "there isn't a list");
+//            System.out.println(service.listGames()); This is what the print output looks like: ListGamesResult[chessGamesList=[GameData[gameID=3169, whiteUsername=null, blackUsername=null, gameName=game9000]]]
+        } catch (DataAccessException e){
+            fail("service.register threw an unexpected DataAccessException");
+        }
     }
 
     @Test
