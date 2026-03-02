@@ -81,7 +81,7 @@ public class Service {
     public CreateGameResult createGame(CreateGameRequest request) throws DataAccessException {
         //game name null
         if (request.gameName() == null){
-            throw new Unauthorized401Exception (""); // changing this line from 400 to 401
+            throw new BadRequest400Exception(""); // changing this line from 401 to 400
         }
         String ID = memGame.generateGameID();
         // throw data access exception if game name already exists
