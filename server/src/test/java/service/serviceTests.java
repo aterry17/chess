@@ -2,6 +2,7 @@ package service;
 
 import dataaccess.*;
 import model.*;
+import org.eclipse.jetty.websocket.core.CoreSession;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -214,11 +215,31 @@ public class serviceTests {
         } catch (DataAccessException e){
             fail("threw an unexpected DataAccessException");
         }
-
     }
 
     @Test
     public void clearTest(){
+        Service service = new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO());
+        try {
+            service.register(new RegisterRequest("user1", "pass1", "email1"));
+            service.register(new RegisterRequest("user2", "pass2", "email2"));
+            service.register(new RegisterRequest("user3", "pass3", "email3"));
+
+            service.createGame(new CreateGameRequest("game9001"));
+            service.createGame(new CreateGameRequest("game9002"));
+            service.createGame(new CreateGameRequest("game9003"));
+
+            assertEquals(new EmptyResult(), service.clear());
+            assertEquals(0, service.listGames().games().size());
+
+            // after clear no one should be able to login
+            assertThrows(Unauthorized401Exception.class, () -> {
+                service.login(new LoginRequest("user2", "pass2"));
+            });
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
 
     }
 
