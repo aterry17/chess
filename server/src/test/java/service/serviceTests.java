@@ -196,6 +196,24 @@ public class serviceTests {
 
     @Test
     public void joinGameNegativeTest(){
+        Service service = new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO());
+        try {
+            service.register(new RegisterRequest("user1", "pass1", "email1"));
+            LoginResult res1 = service.login(new LoginRequest("user1", "pass1"));
+            String authtoken = res1.authToken();
+            String gameID = service.createGame(new CreateGameRequest("game9000")).gameID();
+            // no player color
+            assertThrows(BadRequest400Exception.class, () -> {
+                service.joinGame(new JoinGameRequest(null, gameID), authtoken);
+            });
+            // no gameID
+            assertThrows(BadRequest400Exception.class, () -> {
+                service.joinGame(new JoinGameRequest("BLACK", null), authtoken);
+            });
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
 
     }
 
