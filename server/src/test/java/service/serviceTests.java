@@ -118,15 +118,55 @@ public class serviceTests {
 
     @Test
     public void createGameNegativeTest(){
+// test that gameName = null throws a BadRequest Exception
+        Service service = new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO());
+        try {
+            service.register(new RegisterRequest("user1", "pass1", "email1"));
+            service.login(new LoginRequest("user1", "pass1"));
 
+            assertThrows(BadRequest400Exception.class, () -> {
+                service.createGame(new CreateGameRequest(null)); // no game name
+            });
+        } catch (DataAccessException e){
+            fail("service.register threw an unexpected DataAccessException");
+        }
     }
     @Test
     public void listGamesPositiveTest(){
+        Service service = new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO());
+        try {
+            service.register(new RegisterRequest("user1", "pass1", "email1"));
+            service.createGame(new CreateGameRequest("game1"));
+            service.createGame(new CreateGameRequest("game2"));
+            service.createGame(new CreateGameRequest("game3"));
+            service.createGame(new CreateGameRequest("game4"));
 
+            assertNotNull(service.listGames(), "there is no list");
+//            System.out.println(service.listGames()); // this is printing out the proper result
+
+        } catch (DataAccessException e){
+            fail("service.register threw an unexpected DataAccessException");
+        }
     }
 
     @Test
     public void listGamesNegativeTest(){
+        // list should be empty
+        Service service = new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO());
+        try {
+            RegisterResult res1 = service.register(new RegisterRequest("user1", "pass1", "email1"));
+            String authtoken = res1.authToken();
+            ListGamesResult res2 = service.listGames();
+            assertEquals(res2.chessGamesList().size(), 0, "list should have been empty but was not");
+
+//            // Should get an Unauthorized exception here?
+//            service.logout(authtoken);
+//            assertThrows(DataAccessException.class, () -> {
+//                service.listGames();
+//            });
+        } catch (DataAccessException e){
+            fail("service.register threw an unexpected DataAccessException");
+        }
 
     }
 
