@@ -42,7 +42,7 @@ public class serviceTests {
             LoginResult result = service.login(new LoginRequest("user1", "pass1"));
             assertEquals("user1", result.username());
         } catch (DataAccessException e){
-            fail("service.register threw an unexpected DataAccessException");
+            fail("threw an unexpected DataAccessException");
         }
     }
 
@@ -55,7 +55,7 @@ public class serviceTests {
                     service.login(new LoginRequest("user1", "pass_wrong"));
         });
         } catch (DataAccessException e){
-            fail("service.register threw an unexpected DataAccessException");
+            fail("threw an unexpected DataAccessException");
         }
     }
 
@@ -69,7 +69,7 @@ public class serviceTests {
             EmptyResult result =  service.logout(authtoken);
             assertEquals(new EmptyResult(), result);
         } catch (DataAccessException e){
-            fail("service.register threw an unexpected DataAccessException");
+            fail("threw an unexpected DataAccessException");
         }
     }
 
@@ -95,7 +95,7 @@ public class serviceTests {
                 service.logout("bad"); // need the authtoken
             });
         } catch (DataAccessException e){
-            fail("service.register threw an unexpected DataAccessException");
+            fail("threw an unexpected DataAccessException");
         }
     }
 
@@ -112,7 +112,7 @@ public class serviceTests {
             assertNotNull(service.listGames(), "there isn't a list");
 //            System.out.println(service.listGames()); This is what the print output looks like: ListGamesResult[chessGamesList=[GameData[gameID=3169, whiteUsername=null, blackUsername=null, gameName=game9000]]]
         } catch (DataAccessException e){
-            fail("service.register threw an unexpected DataAccessException");
+            fail("threw an unexpected DataAccessException");
         }
     }
 
@@ -128,7 +128,7 @@ public class serviceTests {
                 service.createGame(new CreateGameRequest(null)); // no game name
             });
         } catch (DataAccessException e){
-            fail("service.register threw an unexpected DataAccessException");
+            fail("threw an unexpected DataAccessException");
         }
     }
     @Test
@@ -145,7 +145,7 @@ public class serviceTests {
 //            System.out.println(service.listGames()); // this is printing out the proper result
 
         } catch (DataAccessException e){
-            fail("service.register threw an unexpected DataAccessException");
+            fail("threw an unexpected DataAccessException");
         }
     }
 
@@ -165,13 +165,32 @@ public class serviceTests {
 //                service.listGames();
 //            });
         } catch (DataAccessException e){
-            fail("service.register threw an unexpected DataAccessException");
+            fail("threw an unexpected DataAccessException");
         }
 
     }
 
     @Test
     public void joinGamePositiveTest(){
+        Service service = new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO());
+        try {
+            service.register(new RegisterRequest("user1", "pass1", "email1"));
+            LoginResult res1 = service.login(new LoginRequest("user1", "pass1"));
+            String authtoken = res1.authToken();
+            String gameID = service.createGame(new CreateGameRequest("game9000")).gameID();
+            EmptyResult res2 = service.joinGame(new JoinGameRequest("WHITE", gameID), authtoken);
+            // should get a clean empty result
+            assertEquals(new EmptyResult(), res2);
+            // there should only be one game
+            assertEquals(1, service.listGames().games().size());
+
+            String gameID2 = service.createGame(new CreateGameRequest("game9002")).gameID();
+            service.joinGame(new JoinGameRequest("WHITE", gameID), authtoken);
+            //there should be two games now
+            assertEquals(2, service.listGames().games().size());
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
 
     }
 
