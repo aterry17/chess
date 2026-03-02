@@ -86,7 +86,7 @@ public class Handler {
         }
     }
 
-    public void handleClearRequest(Service service, Context context) throws DataAccessException{
+    public void handleClearRequest(Service service, Context context){
             Gson gson = new Gson();
             EmptyResult clearResult = service.clear();
             context.result(gson.toJson(clearResult));
