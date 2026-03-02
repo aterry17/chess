@@ -185,7 +185,7 @@ public class serviceTests {
             assertEquals(1, service.listGames().games().size());
 
             String gameID2 = service.createGame(new CreateGameRequest("game9002")).gameID();
-            service.joinGame(new JoinGameRequest("WHITE", gameID), authtoken);
+            service.joinGame(new JoinGameRequest("WHITE", gameID2), authtoken);
             //there should be two games now
             assertEquals(2, service.listGames().games().size());
         } catch (DataAccessException e){
