@@ -131,14 +131,6 @@ public class Service {
     /// from the web-api.md in instruction/web-api/
     public boolean authorized(Context context) throws DataAccessException {
         String authToken = context.header("authorization");
-        /// OG way
-//        if(!memAuth.containsAuth(authToken)){
-//            context.contentType("application/json");
-//            context.status(401);
-//            context.result(new Gson().toJson(Map.of("msg", "invalid authorization")));
-//            return false;
-//        }
-//        return true;
 
         /// new way -- helped a few more tests pass
         // we're still getting 401s thrown more often than they should be
