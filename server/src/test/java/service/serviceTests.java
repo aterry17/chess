@@ -157,7 +157,7 @@ public class serviceTests {
             RegisterResult res1 = service.register(new RegisterRequest("user1", "pass1", "email1"));
             String authtoken = res1.authToken();
             ListGamesResult res2 = service.listGames();
-            assertEquals(res2.chessGamesList().size(), 0, "list should have been empty but was not");
+            assertEquals(res2.games().size(), 0, "list should have been empty but was not");
 
 //            // Should get an Unauthorized exception here?
 //            service.logout(authtoken);
