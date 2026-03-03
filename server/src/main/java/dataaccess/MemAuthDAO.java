@@ -18,7 +18,6 @@ public class MemAuthDAO implements AuthDAO {
         database.add(new AuthData(authtoken, username));
     }
 
-    /// do we even need a getAuth?
     @Override
     public AuthData getAuth(String username) {
         return null;
@@ -30,19 +29,18 @@ public class MemAuthDAO implements AuthDAO {
         while (it.hasNext()) {
             AuthData data = it.next();
             if (data.authToken().equals(authtoken)) {
-                it.remove(); // is this going to lead to a concurrent modification error? since we're deleting something and then continuing to traverse the set?
-                 // should we put in a break here so we're not messing with a concurrent modification error (see textbook pg.254)
+                it.remove();
                 return;
             }
         }
-        throw new Unauthorized401Exception("authtoken not found in database"); // this should only throw if we make it through the set and we haven't
+        throw new Unauthorized401Exception("authtoken not found in database");
     }
 
     public boolean containsAuth(String authToken) {
         Iterator<AuthData> it = database.iterator();
         while (it.hasNext()) {
             var data = it.next();
-            if (data.authToken().equals(authToken)) { // this is likely the problem line -- it's not finding some authtokens
+            if (data.authToken().equals(authToken)) {
                 return true;
             }
         }

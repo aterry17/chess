@@ -13,9 +13,7 @@ public class ServiceTests {
         // check to see that the register result properly sent with the correct username
         try {
             var result = service.register(new RegisterRequest("user1", "pass1", "email1"));
-//            assertEquals(result.username(), "user1"); -- apparently incorrect parameter order
             assertEquals("user1", result.username());
-
         } catch (DataAccessException e){
             fail("service.register threw an unexpected DataAccessException");
         }
@@ -82,15 +80,6 @@ public class ServiceTests {
         try {
             service.register(new RegisterRequest("user1", "pass1", "email1"));
             service.login(new LoginRequest("user1", "pass1"));
-//
-//            a new idea:
-//            service.register(new RegisterRequest(user.username(), user.password(), user.email()));
-//            service.login(new LoginRequest(user.username(), user.password()));
-//            String userauthtoken =
-
-//            assertThrows(Unauthorized401Exception.class, () -> {
-//                service.login(new LoginRequest("user1", "pass_wrong"));
-
             assertThrows(Unauthorized401Exception.class, () -> {
                 service.logout("bad"); // need the authtoken
             });
@@ -106,11 +95,8 @@ public class ServiceTests {
             service.register(new RegisterRequest("user1", "pass1", "email1"));
             service.login(new LoginRequest("user1", "pass1"));
             CreateGameResult result = service.createGame(new CreateGameRequest("game9000"));
-
             assertNotNull(result.gameID(), "we couldn't find the game");
-//            System.out.println(result.gameID()); //put this in to check--there is a valid gammeID
             assertNotNull(service.listGames(), "there isn't a list");
-//            System.out.println(service.listGames()); This is what the print output looks like: ListGamesResult[chessGamesList=[GameData[gameID=3169, whiteUsername=null, blackUsername=null, gameName=game9000]]]
         } catch (DataAccessException e){
             fail("threw an unexpected DataAccessException");
         }
@@ -123,7 +109,6 @@ public class ServiceTests {
         try {
             service.register(new RegisterRequest("user1", "pass1", "email1"));
             service.login(new LoginRequest("user1", "pass1"));
-
             assertThrows(BadRequest400Exception.class, () -> {
                 service.createGame(new CreateGameRequest(null)); // no game name
             });
@@ -140,10 +125,7 @@ public class ServiceTests {
             service.createGame(new CreateGameRequest("game2"));
             service.createGame(new CreateGameRequest("game3"));
             service.createGame(new CreateGameRequest("game4"));
-
             assertNotNull(service.listGames(), "there is no list");
-//            System.out.println(service.listGames()); // this is printing out the proper result
-
         } catch (DataAccessException e){
             fail("threw an unexpected DataAccessException");
         }
@@ -155,19 +137,11 @@ public class ServiceTests {
         Service service = new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO());
         try {
             RegisterResult res1 = service.register(new RegisterRequest("user1", "pass1", "email1"));
-            String authtoken = res1.authToken();
             ListGamesResult res2 = service.listGames();
             assertEquals(res2.games().size(), 0, "list should have been empty but was not");
-
-//            // Should get an Unauthorized exception here?
-//            service.logout(authtoken);
-//            assertThrows(DataAccessException.class, () -> {
-//                service.listGames();
-//            });
         } catch (DataAccessException e){
             fail("threw an unexpected DataAccessException");
         }
-
     }
 
     @Test
@@ -183,7 +157,6 @@ public class ServiceTests {
             assertEquals(new EmptyResult(), res2);
             // there should only be one game
             assertEquals(1, service.listGames().games().size());
-
             String gameID2 = service.createGame(new CreateGameRequest("game9002")).gameID();
             service.joinGame(new JoinGameRequest("WHITE", gameID2), authtoken);
             //there should be two games now
@@ -223,14 +196,11 @@ public class ServiceTests {
             service.register(new RegisterRequest("user1", "pass1", "email1"));
             service.register(new RegisterRequest("user2", "pass2", "email2"));
             service.register(new RegisterRequest("user3", "pass3", "email3"));
-
             service.createGame(new CreateGameRequest("game9001"));
             service.createGame(new CreateGameRequest("game9002"));
             service.createGame(new CreateGameRequest("game9003"));
-
             assertEquals(new EmptyResult(), service.clear());
             assertEquals(0, service.listGames().games().size());
-
             // after clear no one should be able to login
             assertThrows(Unauthorized401Exception.class, () -> {
                 service.login(new LoginRequest("user2", "pass2"));
