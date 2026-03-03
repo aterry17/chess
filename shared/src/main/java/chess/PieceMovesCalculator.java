@@ -48,4 +48,18 @@ public interface PieceMovesCalculator {
     default boolean onBoardEmpty(ChessBoard board, ChessPosition currPosition){
         return (isPosOnBoard(currPosition) && isPosEmpty(board, currPosition));
     }
+
+    default boolean posOnBoard(ChessPosition pos){
+        return (pos.getRow()>=1 && pos.getRow()<=8 && pos.getColumn()>=1 && pos.getColumn()<=8);
+    }
+    default boolean posEmpty(ChessBoard board, ChessPosition pos){
+        if (!posOnBoard(pos)){
+            throw new RuntimeException("position is off-board");
+        }
+        return board.getPiece(pos) == null;
+    }
+
+
 }
+
+
