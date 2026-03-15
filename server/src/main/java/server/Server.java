@@ -11,6 +11,7 @@ public class Server {
 
     private final Javalin javalin;
     private final Service service = new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO());
+    // if we change the above line to use the SQL DAOs will everything still work fine?
 
 
     public Server() {
