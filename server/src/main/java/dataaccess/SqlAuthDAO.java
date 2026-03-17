@@ -15,13 +15,23 @@ public class SqlAuthDAO implements AuthDAO{
     }
 
 
-    public void insertAuth(String username, String authtoken){
+    public void clear(){}
 
-    }
-    public AuthData getAuth(String username){
-        return new AuthData("blank", "blank");
-    }
-    public void deleteAuth(String username) throws Unauthorized401Exception{}
+
+    public void insertAuth(String username, String authToken){};
+
+
+    public void deleteAuth(String username) throws Unauthorized401Exception{};
+
+
+    public boolean containsAuth(String authToken){
+        return false;
+    };
+
+
+    public String getUsername(String authToken){
+        return "";
+    };
 
 
 

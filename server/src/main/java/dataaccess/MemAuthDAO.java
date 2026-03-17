@@ -14,21 +14,21 @@ public class MemAuthDAO implements AuthDAO {
 
 
     @Override
-    public void insertAuth(String authtoken, String username) {
-        database.add(new AuthData(authtoken, username));
+    public void insertAuth(String authToken, String username) {
+        database.add(new AuthData(authToken, username));
     }
 
-    @Override
-    public AuthData getAuth(String username) {
-        return null;
-    }
+//    @Override
+//    public AuthData getAuth(String username) {
+//        return null;
+//    }
 
     @Override
-    public void deleteAuth(String authtoken) throws Unauthorized401Exception {
+    public void deleteAuth(String authToken) throws Unauthorized401Exception {
         Iterator<AuthData> it = database.iterator();
         while (it.hasNext()) {
             AuthData data = it.next();
-            if (data.authToken().equals(authtoken)) {
+            if (data.authToken().equals(authToken)) {
                 it.remove();
                 return;
             }
@@ -47,11 +47,11 @@ public class MemAuthDAO implements AuthDAO {
         return false;
     }
 
-    public String getUsername(String authtoken) {
+    public String getUsername(String authToken) {
         Iterator<AuthData> it = database.iterator();
         while (it.hasNext()) {
             var data = it.next();
-            if (data.authToken().equals(authtoken)) {
+            if (data.authToken().equals(authToken)) {
                 return data.username();
             }
         }
