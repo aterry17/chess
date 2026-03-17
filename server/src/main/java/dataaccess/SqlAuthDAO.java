@@ -42,8 +42,21 @@ public class SqlAuthDAO implements AuthDAO{
     };
 
 
-    public boolean containsAuth(String authToken){
-        return false;
+    public boolean containsAuth(String authToken) throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT EXISTS (SELECT 1 FROM authData WHERE authToken=?)";
+            try (PreparedStatement ps = conn.prepareStatement(statement)) {
+                ps.setString(1, authToken); // not sure about this line
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next() == false) { // this should be false if the set is empty, but may cause issues later?
+                        return false;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new ResponseException(ResponseException.Code.ServerError, String.format("Unable to read data: %s", e.getMessage()));
+        }
+        return true;
     };
 
 
