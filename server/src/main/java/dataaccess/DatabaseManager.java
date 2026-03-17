@@ -20,6 +20,7 @@ public class DatabaseManager {
      * Creates the database if it does not already exist.
      */
     static public void createDatabase() throws DataAccessException {
+        // original:
         var statement = "CREATE DATABASE IF NOT EXISTS " + databaseName;
         try (var conn = DriverManager.getConnection(connectionUrl, dbUsername, dbPassword);
              var preparedStatement = conn.prepareStatement(statement)) {
@@ -27,6 +28,18 @@ public class DatabaseManager {
         } catch (SQLException ex) {
             throw new DataAccessException("failed to create database", ex);
         }
+
+//        // new try: (based off petshop ex)
+//        try {
+//            var statement = "CREATE DATABASE IF NOT EXISTS " + databaseName;
+//            var conn = DriverManager.getConnection(connectionUrl, dbUsername, dbPassword);
+//            try (var preparedStatement = conn.prepareStatement(statement)) {
+//                preparedStatement.executeUpdate();
+//            }
+//        } catch (SQLException ex) {
+//            throw new DataAccessException("failed to create database", ex);
+//        }
+
     }
 
     /**
