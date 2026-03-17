@@ -12,18 +12,30 @@ public class SqlAuthDAO implements AuthDAO{
 
     public SqlAuthDAO() throws DataAccessException {
         configureDatabase();
-        // how to put a table in it now?
+        // table name is authData
     }
     //our database should just have one table of AuthData(authToken, username); --> probably just list these, no need to map anything
 
 
-    public void clear(){}
+    public void clear() throws DataAccessException{
+        // assuming we clear the table but don't delete it?
+        var statement = "TRUNCATE authData";
+        executeUpdate(statement);
+    }
+
+    @Override
+    public void insertAuth(String username, String authToken) throws DataAccessException {
+        var statement = "INSERT INTO AuthData (username, authToken, json) VALUES (?, ?, ?)";
+        // I don't think we actually need to store the actual AuthData object
+//        String json = new Gson().toJson(new AuthData(authToken, username));
+        executeUpdate(statement, username, authToken);
+
+    };
 
 
-    public void insertAuth(String username, String authToken){};
+    public void deleteAuth(String username) throws Unauthorized401Exception{
 
-
-    public void deleteAuth(String username) throws Unauthorized401Exception{};
+    };
 
 
     public boolean containsAuth(String authToken){
@@ -66,7 +78,7 @@ public class SqlAuthDAO implements AuthDAO{
     // modified from PetShop
     private final String[] createStatements = {
             """
-            CREATE TABLE IF NOT EXISTS  AuthData (
+            CREATE TABLE IF NOT EXISTS  authData (
               `id` int NOT NULL AUTO_INCREMENT,
               `username` varchar(256) NOT NULL,
               `authToken` varchar(256) NOT NULL,
