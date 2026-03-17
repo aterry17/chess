@@ -14,7 +14,6 @@ public class SqlAuthDAO implements AuthDAO{
         configureDatabase();
         // table name is authData
     }
-    //our database should just have one table of AuthData(authToken, username); --> probably just list these, no need to map anything
 
     public void clear() throws DataAccessException{
         // assuming we clear the table but don't delete it?
@@ -29,7 +28,7 @@ public class SqlAuthDAO implements AuthDAO{
 //        String json = new Gson().toJson(new AuthData(authToken, username));
         executeUpdate(statement, username, authToken);
 
-    };
+    }
 
 
     public void deleteAuth(String authToken) throws DataAccessException{
@@ -39,7 +38,7 @@ public class SqlAuthDAO implements AuthDAO{
         }
         var statement = "DELETE FROM pet WHERE authToken=?";
         executeUpdate(statement, authToken);
-    };
+    }
 
 
     public boolean containsAuth(String authToken) throws DataAccessException {
@@ -48,7 +47,7 @@ public class SqlAuthDAO implements AuthDAO{
             try (PreparedStatement ps = conn.prepareStatement(statement)) {
                 ps.setString(1, authToken); // not sure about this line
                 try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next() == false) { // this should be false if the set is empty, but may cause issues later?
+                    if (!rs.next()) { // this should be false if the set is empty, but may cause issues later?
                         return false;
                     }
                 }
@@ -57,12 +56,25 @@ public class SqlAuthDAO implements AuthDAO{
             throw new ResponseException(ResponseException.Code.ServerError, String.format("Unable to read data: %s", e.getMessage()));
         }
         return true;
-    };
+    }
 
 
-    public String getUsername(String authToken){
-        return "";
-    };
+    public String getUsername(String authToken) throws DataAccessException {
+        try (Connection conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT username FROM authData WHERE authToken=?";
+            try (PreparedStatement ps = conn.prepareStatement(statement)) {
+                ps.setString(1, authToken); // not sure about this line
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) { // this should be false if the set is empty, but may cause issues later?
+                        return rs.getString("username");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new ResponseException(ResponseException.Code.ServerError, String.format("Unable to read data: %s", e.getMessage()));
+        }
+        return null;
+    }
 
 
 
