@@ -12,7 +12,9 @@ public class SqlAuthDAO implements AuthDAO{
 
     public SqlAuthDAO() throws DataAccessException {
         configureDatabase();
+        // how to put a table in it now?
     }
+    //our database should just have one table of AuthData(authToken, username); --> probably just list these, no need to map anything
 
 
     public void clear(){}
@@ -35,17 +37,17 @@ public class SqlAuthDAO implements AuthDAO{
 
 
 
-    // taken from PetShop
+    // modified from PetShop
     private final String[] createStatements = {
             """
-            CREATE TABLE IF NOT EXISTS  pet (
+            CREATE TABLE IF NOT EXISTS  AuthData (
               `id` int NOT NULL AUTO_INCREMENT,
-              `name` varchar(256) NOT NULL,
-              `type` ENUM('CAT', 'DOG', 'FISH', 'FROG', 'ROCK') DEFAULT 'CAT',
+              `username` varchar(256) NOT NULL,
+              `authToken` varchar(256) NOT NULL,
               `json` TEXT DEFAULT NULL,
               PRIMARY KEY (`id`),
-              INDEX(type),
-              INDEX(name)
+              INDEX(username),
+              INDEX(authToken)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
     };
