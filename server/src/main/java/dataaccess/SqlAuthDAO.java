@@ -16,7 +16,6 @@ public class SqlAuthDAO implements AuthDAO{
     }
     //our database should just have one table of AuthData(authToken, username); --> probably just list these, no need to map anything
 
-
     public void clear() throws DataAccessException{
         // assuming we clear the table but don't delete it?
         var statement = "TRUNCATE authData";
@@ -33,8 +32,13 @@ public class SqlAuthDAO implements AuthDAO{
     };
 
 
-    public void deleteAuth(String username) throws Unauthorized401Exception{
-
+    public void deleteAuth(String authToken) throws DataAccessException{
+        // call containsAuth to throw 401
+        if (containsAuth(authToken) == false){
+            throw new Unauthorized401Exception("authToken not found in database");
+        }
+        var statement = "DELETE FROM pet WHERE authToken=?";
+        executeUpdate(statement, authToken);
     };
 
 
