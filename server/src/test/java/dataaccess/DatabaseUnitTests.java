@@ -19,30 +19,65 @@ public class DatabaseUnitTests {
         try {
             var sqlDataBase = new SqlAuthDAO();
             sqlDataBase.insertAuth("user1", "auth1");
-            assertTrue(sqlDataBase.containsAuth("auth1")); // we'll have to figure out a way to test contains
-            assertEquals("user1", sqlDataBase.getUsername("auth1")); // and a way to test this
+            assertTrue(sqlDataBase.containsAuth("auth1")); // containsAuth is not working
+            assertEquals("user1", sqlDataBase.getUsername("auth1")); // getUsername is working
         } catch (DataAccessException e){
             fail("insertAuth threw an unexpected DataAccessException");
         }
     }
 
     @Test
-    public void insertAuthNegativeTest(){}
+    public void insertAuthNegativeTest(){
+        try {
+            var sqlDataBase = new SqlAuthDAO();
+            sqlDataBase.insertAuth("user1", "auth1");
+            // Look for an incorrect authToken
+            assertFalse(sqlDataBase.containsAuth("badauth")); // we'll have to figure out a way to test contains
+
+//            // Bad parameters -- I actually don't know how to test bad parameters here
+//            assertThrows(DataAccessException.class, () -> {
+//                sqlDataBase.insertAuth("","badParams");
+//            });
+        } catch (DataAccessException e){
+            fail("insertAuth threw an unexpected DataAccessException");
+        }
+    }
 
     @Test
-    public void deleteAuthPositiveTest(){}
+    public void deleteAuthPositiveTest(){
+        try {
+            var sqlDataBase = new SqlAuthDAO();
+            sqlDataBase.insertAuth("user1", "auth1");
+            sqlDataBase.insertAuth("user2", "auth2");
+            sqlDataBase.deleteAuth("auth1");
+            assertEquals(null, sqlDataBase.getUsername("auth1"));
+
+        } catch (DataAccessException e){
+            fail("deleteAuth threw an unexpected DataAccessException");
+        }
+    }
 
     @Test
     public void deleteAuthNegativeTest(){}
 
     @Test
-    public void containsAuthPositiveTest(){}
+    public void containsAuthPositiveTest(){
+
+    }
 
     @Test
     public void containsAuthNegativeTest(){}
 
     @Test
     public void getUsernamePositiveTest(){
+        try {
+            var sqlDataBase = new SqlAuthDAO();
+            sqlDataBase.insertAuth("user1", "auth1");
+            assertEquals("user1", sqlDataBase.getUsername("auth1"));
+//            System.out.println(sqlDataBase.getUsername("auth1"));
+        } catch (DataAccessException e){
+            fail("getUsername threw an unexpected DataAccessException");
+        }
 
     }
 

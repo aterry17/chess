@@ -32,29 +32,32 @@ public class SqlAuthDAO implements AuthDAO{
 
     public void deleteAuth(String authToken) throws DataAccessException{
         // call containsAuth to throw 401
-        if (containsAuth(authToken) == false){
+        if (containsAuth(authToken) == false){ // contains is creating a problem here :(
             throw new Unauthorized401Exception("authToken not found in database");
         }
-        var statement = "DELETE FROM pet WHERE authToken=?";
+        var statement = "DELETE FROM authData WHERE authToken=?";
         executeUpdate(statement, authToken);
     }
 
 
     public boolean containsAuth(String authToken) throws DataAccessException {
-        try (Connection conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT EXISTS (SELECT 1 FROM authData WHERE authToken=?)";
-            try (PreparedStatement ps = conn.prepareStatement(statement)) {
-                ps.setString(1, authToken); // not sure about this line
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (!rs.next()) { // this should be false if the set is empty, but may cause issues later?
-                        return false;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw new ResponseException(ResponseException.Code.ServerError, String.format("Unable to read data: %s", e.getMessage()));
-        }
-        return true;
+//        try (Connection conn = DatabaseManager.getConnection()) {
+//            var statement = "SELECT EXISTS (SELECT 1 FROM authData WHERE authToken=?)";
+//            try (PreparedStatement ps = conn.prepareStatement(statement)) {
+//                ps.setString(1, authToken); // this line appears to be working
+//                try (ResultSet rs = ps.executeQuery()) {
+//                    if (!rs.isBeforeFirst()) {
+//                        return false;
+//                    }
+//                }
+//            }
+//        } catch (Exception e) {
+//            throw new ResponseException(ResponseException.Code.ServerError, String.format("Unable to read data: %s", e.getMessage()));
+//        }
+//        return true;
+        if (getUsername(authToken) == null){
+            return false;
+        } return true;
     }
 
 
