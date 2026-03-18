@@ -23,13 +23,12 @@ public class SqlAuthDAO implements AuthDAO{
 
     @Override
     public void insertAuth(String username, String authToken) throws DataAccessException {
-        var statement = "INSERT INTO AuthData (username, authToken, json) VALUES (?, ?, ?)";
+        var statement = "INSERT INTO authData (username, authToken) VALUES (?, ?)";
         // I don't think we actually need to store the actual AuthData object
 //        String json = new Gson().toJson(new AuthData(authToken, username));
         executeUpdate(statement, username, authToken);
 
     }
-
 
     public void deleteAuth(String authToken) throws DataAccessException{
         // call containsAuth to throw 401
