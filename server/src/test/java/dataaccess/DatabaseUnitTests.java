@@ -4,6 +4,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 public class DatabaseUnitTests {
 
+
+
+    /// SqlUserDAO tests:
+
+
+
     /// SqlAuthDAO tests:
 
     @Test
@@ -69,7 +75,18 @@ public class DatabaseUnitTests {
     }
 
     @Test
-    public void deleteAuthNegativeTest(){}
+    public void deleteAuthNegativeTest(){
+        try {
+            var sqlDataBase = new SqlAuthDAO();
+            sqlDataBase.clear();
+            assertThrows(DataAccessException.class, () -> {
+                sqlDataBase.deleteAuth("auth1");
+            });
+
+        } catch (DataAccessException e){
+            fail("deleteAuth threw an unexpected DataAccessException");
+        }
+    }
 
     @Test
     public void containsAuthPositiveTest(){
@@ -112,7 +129,15 @@ public class DatabaseUnitTests {
     }
 
     @Test
-    public void getUsernameNegativeTest(){}
+    public void getUsernameNegativeTest(){
+        try {
+            var sqlDataBase = new SqlAuthDAO();
+            sqlDataBase.clear();
+            assertNull(sqlDataBase.getUsername("nonExistentUser"));
+        } catch (DataAccessException e){
+            fail("getUsername threw an unexpected DataAccessException");
+        }
+    }
 
 
 
