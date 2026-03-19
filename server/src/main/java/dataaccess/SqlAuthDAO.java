@@ -55,6 +55,13 @@ public class SqlAuthDAO implements AuthDAO{
 //            throw new ResponseException(ResponseException.Code.ServerError, String.format("Unable to read data: %s", e.getMessage()));
 //        }
 //        return true;
+        /// thought I needed the below but it turns out it may be working properly without it...
+//        try {
+//            getUsername(authToken);
+//        } catch (DataAccessException e){
+//            return false;
+//        }
+        // should the below be in the try block?
         if (getUsername(authToken) == null){
             return false;
         } return true;
