@@ -8,6 +8,15 @@ public class DatabaseUnitTests {
 
     @Test
     public void clearTest(){
+        try {
+            var sqlDataBase = new SqlAuthDAO();
+            sqlDataBase.clear();
+            sqlDataBase.insertAuth("user1", "auth1");
+            sqlDataBase.clear();
+            assertFalse(sqlDataBase.containsAuth("auth1"));
+        } catch (DataAccessException e){
+            fail("clear threw an unexpected DataAccessException");
+        }
 
     }
 
@@ -59,7 +68,18 @@ public class DatabaseUnitTests {
     }
 
     @Test
-    public void deleteAuthNegativeTest(){}
+    public void deleteAuthNegativeTest(){
+        try {
+            var sqlDataBase = new SqlAuthDAO();
+            sqlDataBase.clear();
+            assertThrows(Unauthorized401Exception.class, () -> {
+                sqlDataBase.deleteAuth("auth1");
+            });
+
+        } catch (DataAccessException e){
+            fail("deleteAuth threw an unexpected DataAccessException");
+        }
+    }
 
     @Test
     public void containsAuthPositiveTest(){
@@ -102,7 +122,16 @@ public class DatabaseUnitTests {
     }
 
     @Test
-    public void getUsernameNegativeTest(){}
+    public void getUsernameNegativeTest(){
+        try {
+            var sqlDataBase = new SqlAuthDAO();
+            sqlDataBase.clear();
+            assertNull(sqlDataBase.getUsername("non-existent"));
+        } catch (DataAccessException e){
+            fail("getUsername threw an unexpected DataAccessException");
+        }
+
+    }
 
 
 
