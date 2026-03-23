@@ -59,7 +59,7 @@ public class Service {
         if (user == null){
             throw new Unauthorized401Exception("");
         }// username and password don't match
-        if (!user.password().equals(request.password())){
+        if (!memUser.correctPassword(user.username(), request.password())){
             throw new Unauthorized401Exception("");
         }
         var authtoken = generateToken();

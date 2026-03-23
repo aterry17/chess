@@ -1,13 +1,42 @@
 package dataaccess;
 
+import model.UserData;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 public class DatabaseUnitTests {
 
+
+    ///  SqlUserDAO tests:
+
+    @Test
+    public void clearTestUser(){}
+    @Test
+    public void createUserPositiveTest(){}
+    @Test
+    public void createUserNegativeTest(){}
+    @Test
+    public void getUsernameUserPositiveTest(){}
+    @Test
+    public void getUsernameUserNegativeTest(){}
+    @Test
+    public void getUserPositiveTest(){}
+    @Test
+    public void getUserNegativeTest(){}
+    @Test
+    public void correctPasswordPositiveTest(){}
+    @Test
+    public void correctPasswordNegativeTest(){}
+
+
+
+
+
+
+
     /// SqlAuthDAO tests:
 
     @Test
-    public void clearTest(){
+    public void clearTestAuth(){
         try {
             var sqlDataBase = new SqlAuthDAO();
             sqlDataBase.clear();
@@ -108,7 +137,7 @@ public class DatabaseUnitTests {
     }
 
     @Test
-    public void getUsernamePositiveTest(){
+    public void getUsernameAuthPositiveTest(){
         try {
             var sqlDataBase = new SqlAuthDAO();
             sqlDataBase.clear();
@@ -122,7 +151,7 @@ public class DatabaseUnitTests {
     }
 
     @Test
-    public void getUsernameNegativeTest(){
+    public void getUsernameAuthNegativeTest(){
         try {
             var sqlDataBase = new SqlAuthDAO();
             sqlDataBase.clear();

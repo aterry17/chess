@@ -13,6 +13,11 @@ public class MemUserDAO implements UserDAO{
     }
 
     @Override
+    public void createUser(UserData u) {
+        database.put(u.username(), u);
+    }
+
+    @Override
     public String getUsername(UserData u) { // right now only returning username
         if (database.get(u.username()) != null){
             return u.username();
@@ -21,13 +26,12 @@ public class MemUserDAO implements UserDAO{
             return null;
         }
     }
-
-    @Override
-    public void createUser(UserData u) {
-        database.put(u.username(), u);
-    }
-
     public UserData getUser(String username){
         return database.get(username);
+    }
+
+    public boolean correctPassword(String username, String proviededClearTextPass) {
+        var user = getUser(username);
+        return user.password().equals(proviededClearTextPass);
     }
 }
