@@ -9,7 +9,17 @@ public class DatabaseUnitTests {
     ///  SqlUserDAO tests:
 
     @Test
-    public void clearTestUser(){}
+    public void clearTestUser(){
+        try {
+            var sqlDataBase = new SqlUserDAO();
+            sqlDataBase.clear();
+            sqlDataBase.createUser(new UserData("user1", "pass1", "email1"));
+            sqlDataBase.clear();
+            assertNull(sqlDataBase.getUser("user1"));
+        } catch (DataAccessException e){
+            fail("clear threw an unexpected DataAccessException");
+        }
+    }
     @Test
     public void createUserPositiveTest(){}
     @Test

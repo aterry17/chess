@@ -35,7 +35,7 @@ public class SqlUserDAO implements UserDAO{
         String email = u.email();
         String hashedPass = BCrypt.hashpw(clearTextPass, BCrypt.gensalt());
 
-        var statement = "INSERT INTO userData (username, hashedPass, email) VALUES (?, ?, ?)";
+        var statement = "INSERT INTO userData (username, password, email) VALUES (?, ?, ?)";
         executeUpdate(statement, username, hashedPass, email);
 
     }
@@ -145,10 +145,13 @@ public class SqlUserDAO implements UserDAO{
               `email` varchar(256) NOT NULL,
               `json` TEXT DEFAULT NULL,
               PRIMARY KEY (`id`),
-              INDEX(username),
+              INDEX(username)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
     };
+
+
+
 
 
     private void configureDatabase() throws DataAccessException {
