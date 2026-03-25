@@ -100,7 +100,6 @@ public class SqlGameDAO implements GameDAO{
 
     // taken from PetShop
     private GameData readGame(ResultSet rs) throws SQLException{
-        var gameID = rs.getInt("gameID");
         var json = rs.getString("json");
         GameData game = new Gson().fromJson(json, GameData.class);
         return game; // PetShop last line is: game.setID(gameID);
