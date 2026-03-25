@@ -172,9 +172,37 @@ public class DatabaseUnitTests {
         }
     }
     @Test
-    public void validateGameIDPositiveTest(){}
+    public void validateGameIDPositiveTest(){
+        try {
+            var sqlDataBase = new SqlGameDAO();
+            sqlDataBase.clear();
+            sqlDataBase.createGame("game1", "1111");
+            sqlDataBase.createGame("game2", "2222");
+            sqlDataBase.createGame("game3", "3333");
+            assertTrue(sqlDataBase.validGameID("1111"));
+            assertTrue(sqlDataBase.validGameID("3333"));
+            assertTrue(sqlDataBase.validGameID("1111")); // make sure checking the ID doesn't take it out of the database
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
+    }
     @Test
-    public void validateGameIDNegativeTest(){}
+    public void validateGameIDNegativeTest(){
+        try {
+            var sqlDataBase = new SqlGameDAO();
+            sqlDataBase.clear();
+            sqlDataBase.createGame("game1", "1111");
+            sqlDataBase.createGame("game2", "2222");
+            sqlDataBase.createGame("game3", "3333");
+            assertFalse(sqlDataBase.validGameID("badID"));
+            assertFalse(sqlDataBase.validGameID(null));
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
+
+    }
 
 
 
