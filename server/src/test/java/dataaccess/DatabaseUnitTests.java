@@ -82,7 +82,27 @@ public class DatabaseUnitTests {
         }
     }
     @Test
-    public void listGamesPositiveTest(){}
+    public void listGamesPositiveTest(){
+        try {
+            var sqlDataBase = new SqlGameDAO();
+            sqlDataBase.clear();
+            var game1 = new GameData("1111", null, null, "game1");
+            var game2 = new GameData("2222", null, null, "game2");
+            var game3 = new GameData("3333", null, null, "game3");
+
+            sqlDataBase.createGame("game1", "1111");
+            sqlDataBase.createGame("game2", "2222");
+            sqlDataBase.createGame("game3", "3333");
+            var expectedResultList = new ArrayList<GameData>();
+            expectedResultList.add(game1);
+            expectedResultList.add(game2);
+            expectedResultList.add(game3);
+            assertEquals(expectedResultList, sqlDataBase.listGames());
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
+    }
     @Test
     public void listGamesNegativeTest(){}
     @Test
