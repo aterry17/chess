@@ -1,12 +1,47 @@
 package dataaccess;
 
+import model.GameData;
 import model.UserData;
 import org.eclipse.jetty.server.Authentication;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 public class DatabaseUnitTests {
 
     /// SqlGameDAO tests:
+    void clear() throws DataAccessException;
+    void createGame(String gameName, String gameID) throws DataAccessException;
+    GameData getGame(String gameID) throws DataAccessException;
+    ArrayList<GameData> listGames() throws DataAccessException;
+    void updateGame(String playerColor, String playerUsername, String gameID) throws DataAccessException;
+    String generateGameID();
+    boolean validGameID(String gameID) throws DataAccessException;
+
+    @Test
+    public void clearTestGame(){}
+    @Test
+    public void createGamePositiveTest(){}
+    @Test
+    public void createGameNegativeTest(){}
+    @Test
+    public void getGamePositiveTest(){}
+    @Test
+    public void getGameNegativeTest(){}
+    @Test
+    public void listGamesPositiveTest(){}
+    @Test
+    public void listGamesNegativeTest(){}
+    @Test
+    public void updateGamePositiveTest(){}
+    @Test
+    public void updateGameNegativeTest(){}
+    @Test
+    public void generateGameIDPositiveTest(){}
+    @Test
+    public void generateGameIDNegativeTest(){}
+
 
 
 

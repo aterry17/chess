@@ -31,6 +31,7 @@ public class SqlGameDAO implements GameDAO{
         executeUpdate(statement, gameID, json);
     }
 
+    // taken from PetShop
     public GameData getGame(String gameID) throws DataAccessException{
         try (Connection conn = DatabaseManager.getConnection()) {
             var statement = "SELECT gameID, json FROM gameData WHERE gameID=?";
@@ -49,6 +50,7 @@ public class SqlGameDAO implements GameDAO{
 
     }
 
+    // taken from PetShop
     public ArrayList<GameData> listGames() throws DataAccessException{
         var result = new ArrayList<GameData>();
         try (Connection conn = DatabaseManager.getConnection()) {
@@ -86,11 +88,11 @@ public class SqlGameDAO implements GameDAO{
         executeUpdate(statement, json, gameID);
     }
 
-    public String generateGameID(){
-        // generate an integer 1000-9999
-        Random rand = new Random();
-        return String.valueOf(rand.nextInt(1000,10000));
-    }
+//    public String generateGameID(){
+//        // generate an integer 1000-9999
+//        Random rand = new Random();
+//        return String.valueOf(rand.nextInt(1000,10000));
+//    }
 
     public boolean validGameID(String gameID) throws DataAccessException{
         if (getGame(gameID) == null){

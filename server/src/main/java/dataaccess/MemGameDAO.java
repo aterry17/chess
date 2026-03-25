@@ -45,11 +45,11 @@ public class MemGameDAO implements GameDAO{
             database.put(gameID, new GameData(gameID, whiteUsername, playerUsername, gameName));
         }
     }
-    public String generateGameID(){
-        // generate an integer 1000-9999
-        Random rand = new Random();
-        return String.valueOf(rand.nextInt(1000,10000));
-    }
+//    public String generateGameID(){
+//        // generate an integer 1000-9999
+//        Random rand = new Random();
+//        return String.valueOf(rand.nextInt(1000,10000));
+//    }
 
     public boolean validGameID(String gameID) {
         for (String gameName : database.keySet()) {

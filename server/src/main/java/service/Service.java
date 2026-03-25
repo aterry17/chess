@@ -6,6 +6,7 @@ import io.javalin.http.Context;
 import model.*;
 
 //import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 public class Service {
@@ -23,6 +24,12 @@ public class Service {
     private static String generateToken() {
         return UUID.randomUUID().toString();
     }
+    private String generateGameID(){
+        // generate an integer 1000-9999
+        Random rand = new Random();
+        return String.valueOf(rand.nextInt(1000,10000));
+    }
+
 
     public RegisterResult register(RegisterRequest request) throws DataAccessException {
         //username is null
@@ -83,7 +90,7 @@ public class Service {
         if (request.gameName() == null){
             throw new BadRequest400Exception(""); // changing this line from 401 to 400
         }
-        String gameID = memGame.generateGameID();
+        String gameID = generateGameID();
         // throw data access exception if game name already exists
         memGame.createGame(request.gameName(), gameID);
         return new CreateGameResult(gameID);
