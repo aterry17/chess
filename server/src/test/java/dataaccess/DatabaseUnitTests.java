@@ -149,7 +149,28 @@ public class DatabaseUnitTests {
         }
     }
     @Test
-    public void updateGameNegativeTest(){}
+    public void updateGameNegativeTest(){
+        try {
+            var sqlDataBase = new SqlGameDAO();
+            sqlDataBase.clear();
+            var game1 = new GameData("1111", "userW", null, "game1");
+            var game3 = new GameData("3333", null, "userB", "game3");
+            sqlDataBase.createGame("game1", "1111");
+            sqlDataBase.createGame("game2", "2222");
+            sqlDataBase.createGame("game3", "3333");
+            sqlDataBase.updateGame("BADCOLOR", "userW", "1111");
+            sqlDataBase.updateGame("WHITE", "userW", "3333");
+            assertNotEquals(game1, sqlDataBase.getGame("1111"));
+            assertNotEquals(game3, sqlDataBase.getGame("3333"));
+            assertThrows(NullPointerException.class, () -> {
+                sqlDataBase.updateGame(null, null, null);
+
+            });
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
+    }
     @Test
     public void validateGameIDPositiveTest(){}
     @Test
