@@ -69,7 +69,18 @@ public class DatabaseUnitTests {
         }
     }
     @Test
-    public void getGameNegativeTest(){}
+    public void getGameNegativeTest(){
+        try {
+            var sqlDataBase = new SqlGameDAO();
+            sqlDataBase.clear();
+            sqlDataBase.createGame("game1", "1111");
+            assertNull(sqlDataBase.getGame(null));
+            assertNull(sqlDataBase.getGame("badID"));
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
+    }
     @Test
     public void listGamesPositiveTest(){}
     @Test
