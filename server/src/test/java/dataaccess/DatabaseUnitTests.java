@@ -52,7 +52,22 @@ public class DatabaseUnitTests {
         }
     }
     @Test
-    public void getGamePositiveTest(){}
+    public void getGamePositiveTest(){
+        try {
+            var sqlDataBase = new SqlGameDAO();
+            sqlDataBase.clear();
+            var game1 = new GameData("1111", null, null, "game1");
+            var game2= new GameData("2222", null, null, "game2");
+            sqlDataBase.createGame("game1", "1111");
+            sqlDataBase.createGame("game2", "2222");
+            assertEquals(game1, sqlDataBase.getGame("1111"));
+            assertEquals(game2, sqlDataBase.getGame("2222"));
+            assertNull(sqlDataBase.getGame("3333"));
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
+    }
     @Test
     public void getGameNegativeTest(){}
     @Test
