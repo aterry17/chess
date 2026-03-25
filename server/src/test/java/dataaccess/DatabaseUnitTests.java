@@ -13,7 +13,17 @@ public class DatabaseUnitTests {
     /// SqlGameDAO tests:
 
     @Test
-    public void clearTestGame(){}
+    public void clearTestGame(){
+        try {
+            var sqlDataBase = new SqlGameDAO();
+            sqlDataBase.clear();
+            sqlDataBase.createGame("game1", "1111");
+            sqlDataBase.clear();
+            assertNull(sqlDataBase.getGame("1111"));
+        } catch (DataAccessException e){
+            fail("clear threw an unexpected DataAccessException");
+        }
+    }
     @Test
     public void createGamePositiveTest(){}
     @Test
