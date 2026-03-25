@@ -84,7 +84,7 @@ public class SqlGameDAO implements GameDAO{
             json = new Gson().toJson(newGame);
 
         }
-        var statement = "UPDATE gameData SET json=? WHERE gameID=? VALUES (?, ?)"; // no confidence in this line
+        var statement = "UPDATE gameData SET json=? WHERE gameID=?"; // no confidence in this line
         executeUpdate(statement, json, gameID);
     }
 
