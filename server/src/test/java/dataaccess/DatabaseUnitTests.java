@@ -1,6 +1,7 @@
 package dataaccess;
 
 import model.UserData;
+import org.eclipse.jetty.server.Authentication;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 public class DatabaseUnitTests {
@@ -21,7 +22,18 @@ public class DatabaseUnitTests {
         }
     }
     @Test
-    public void createUserPositiveTest(){}
+    public void createUserPositiveTest(){
+        try {
+            var sqlDataBase = new SqlUserDAO();
+            sqlDataBase.clear();
+            var user = new UserData("user1", "pass1", "email1");
+            sqlDataBase.createUser(user);
+            assertNotNull(sqlDataBase.getUser("user1"));
+            assertEquals("user1", sqlDataBase.getUsername(user));
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
+    }
     @Test
     public void createUserNegativeTest(){}
     @Test
