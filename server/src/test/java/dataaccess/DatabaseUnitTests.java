@@ -35,15 +35,74 @@ public class DatabaseUnitTests {
         }
     }
     @Test
-    public void createUserNegativeTest(){}
+    public void createUserNegativeTest(){
+        try {
+            var sqlDataBase = new SqlUserDAO();
+            sqlDataBase.clear();
+            assertThrows(DataAccessException.class, () -> {
+                sqlDataBase.createUser(new UserData(null, null, null));
+            });
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
+    }
     @Test
-    public void getUsernameUserPositiveTest(){}
+    public void getUsernameUserPositiveTest(){
+        try {
+            var sqlDataBase = new SqlUserDAO();
+            sqlDataBase.clear();
+            var user1 = new UserData("user1", "pass1", "email1");
+            var user2 = new UserData("user2", "pass2", "email2");
+            sqlDataBase.createUser(user1);
+            sqlDataBase.createUser(user2);
+            assertEquals("user1", sqlDataBase.getUsername(user1));
+            assertEquals("user2", sqlDataBase.getUsername(user2));
+            assertNull(sqlDataBase.getUsername(new UserData("bad", "bad", "bad")));
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
+    }
     @Test
-    public void getUsernameUserNegativeTest(){}
+    public void getUsernameUserNegativeTest(){
+        try {
+            var sqlDataBase = new SqlUserDAO();
+            sqlDataBase.clear();
+            assertNull(sqlDataBase.getUsername(new UserData(null, null, null)));
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
+    }
     @Test
-    public void getUserPositiveTest(){}
+    public void getUserPositiveTest(){
+        try {
+            var sqlDataBase = new SqlUserDAO();
+            sqlDataBase.clear();
+            var user1 = new UserData("user1", "pass1", "email1");
+            var user2 = new UserData("user2", "pass2", "email2");
+            sqlDataBase.createUser(user1);
+            sqlDataBase.createUser(user2);
+            assertEquals("email1", sqlDataBase.getUser("user1").email());
+            assertEquals("email2", sqlDataBase.getUser("user2").email());
+            assertNull(sqlDataBase.getUser("badUser"));
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
+    }
     @Test
-    public void getUserNegativeTest(){}
+    public void getUserNegativeTest(){
+        try {
+            var sqlDataBase = new SqlUserDAO();
+            sqlDataBase.clear();
+            assertNull(sqlDataBase.getUser(null));
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
+    }
     @Test
     public void correctPasswordPositiveTest(){}
     @Test
