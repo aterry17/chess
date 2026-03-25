@@ -104,7 +104,24 @@ public class DatabaseUnitTests {
         }
     }
     @Test
-    public void listGamesNegativeTest(){}
+    public void listGamesNegativeTest(){
+        try {
+            var sqlDataBase = new SqlGameDAO();
+            sqlDataBase.clear();
+            var game1 = new GameData("1111", null, null, "game1");
+            var game2 = new GameData("2222", null, null, "game2");
+            var game3 = new GameData("3333", null, null, "game3");
+            var expectedResultList = new ArrayList<GameData>();
+            expectedResultList.add(game1);
+            expectedResultList.add(game2);
+            expectedResultList.add(game3);
+            assertNotEquals(expectedResultList, sqlDataBase.listGames());
+            assertTrue(sqlDataBase.listGames().isEmpty());
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
+    }
     @Test
     public void updateGamePositiveTest(){}
     @Test
