@@ -13,6 +13,8 @@ public class Server {
     private final Service service = new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO());
     // if we change the above line to use the SQL DAOs will everything still work fine?
 
+//    private final Service service = new Service(new SqlUserDAO(), new SqlAuthDAO(), new SqlGameDAO());
+
 
     public Server() {
 

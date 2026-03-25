@@ -11,13 +11,24 @@ import java.util.UUID;
 
 public class Service {
 
-    private final MemUserDAO memUser;
-    private final MemAuthDAO memAuth;
-    private final MemGameDAO memGame;
-    public Service(MemUserDAO memUser, MemAuthDAO memAuth, MemGameDAO memGame) {
-        this.memUser = memUser;
-        this.memAuth = memAuth;
-        this.memGame = memGame;
+    /// Memory Databases
+    private final MemUserDAO userDatabase;
+    private final MemAuthDAO authDatabase;
+    private final MemGameDAO gameDatabase;
+
+    /// SQL Databases
+//    private final SqlUserDAO userDatabase;
+//    private final SqlAuthDAO authDatabase;
+//    private final SqlGameDAO gameDatabase;
+
+    ///  Memory Service
+    public Service(MemUserDAO userDatabase, MemAuthDAO authDatabase, MemGameDAO gameDatabase) {
+
+    /// SQL Service
+//    public Service(SqlUserDAO userDatabase, SqlAuthDAO authDatabase, SqlGameDAO gameDatabase) {
+        this.userDatabase = userDatabase;
+        this.authDatabase= authDatabase;
+        this.gameDatabase = gameDatabase;
     }
 //    private MemUserDAO mem = new MemUserDAO();
 
@@ -44,12 +55,12 @@ public class Service {
         }
         var user = new UserData(request.username(), request.password(), request.email());
         // check to see if username already exists
-        if(memUser.getUsername(user) != null){
+        if(userDatabase.getUsername(user) != null){
             throw new AlreadyTaken403Exception("");
         }
-        memUser.createUser(user);
+        userDatabase.createUser(user);
         String authtoken = generateToken();
-        memAuth.insertAuth(authtoken, user.username());
+        authDatabase.insertAuth(authtoken, user.username());
         return new RegisterResult(user.username(), authtoken);
     }
 
@@ -61,28 +72,28 @@ public class Service {
         if (request.password() == null){
             throw new BadRequest400Exception("");
         }
-        var user = memUser.getUser(request.username());
+        var user = userDatabase.getUser(request.username());
         // user is not in database
         if (user == null){
             throw new Unauthorized401Exception("");
         }// username and password don't match
-        if (!memUser.correctPassword(user.username(), request.password())){
+        if (!userDatabase.correctPassword(user.username(), request.password())){
             throw new Unauthorized401Exception("");
         }
         var authtoken = generateToken();
         // put the AuthData(authToken, username) into the MemAuthDAO
-        memAuth.insertAuth(authtoken, user.username());
+        authDatabase.insertAuth(authtoken, user.username());
         return new LoginResult(user.username(), authtoken);
     }
 
     public EmptyResult logout(String authtoken) throws DataAccessException {
         // assuming that the handler took care of unauthorized, just remove the AuthData
-        memAuth.deleteAuth(authtoken);
+        authDatabase.deleteAuth(authtoken);
         return new EmptyResult();
     }
 
     public ListGamesResult listGames() throws DataAccessException {
-        return new ListGamesResult(memGame.listGames());
+        return new ListGamesResult(gameDatabase.listGames());
     }
 
     public CreateGameResult createGame(CreateGameRequest request) throws DataAccessException {
@@ -92,7 +103,7 @@ public class Service {
         }
         String gameID = generateGameID();
         // throw data access exception if game name already exists
-        memGame.createGame(request.gameName(), gameID);
+        gameDatabase.createGame(request.gameName(), gameID);
         return new CreateGameResult(gameID);
     }
 
@@ -106,22 +117,22 @@ public class Service {
             throw new BadRequest400Exception("playerColor was null");
         }
 
-        String username = memAuth.getUsername(authtoken);
-        if (!memGame.validGameID(request.gameID())){
+        String username = authDatabase.getUsername(authtoken);
+        if (!gameDatabase.validGameID(request.gameID())){
             throw new BadRequest400Exception("");
         }
 
         if (request.playerColor().equals("WHITE")){
-            if (memGame.getGame(request.gameID()).whiteUsername() != null){
+            if (gameDatabase.getGame(request.gameID()).whiteUsername() != null){
                 throw new AlreadyTaken403Exception("");
             }
-            memGame.updateGame(request.playerColor(), username, request.gameID());
+            gameDatabase.updateGame(request.playerColor(), username, request.gameID());
             return new EmptyResult();
         } else if (request.playerColor().equals("BLACK")){
-            if (memGame.getGame(request.gameID()).blackUsername() != null){
+            if (gameDatabase.getGame(request.gameID()).blackUsername() != null){
                 throw new AlreadyTaken403Exception("");
             }
-            memGame.updateGame(request.playerColor(), username, request.gameID());
+            gameDatabase.updateGame(request.playerColor(), username, request.gameID());
             return new EmptyResult();
         } else {
             throw new BadRequest400Exception("");
@@ -129,9 +140,9 @@ public class Service {
     }
 
     public EmptyResult clear(){
-        memGame.clear();
-        memAuth.clear();
-        memUser.clear();
+        gameDatabase.clear();
+        authDatabase.clear();
+        userDatabase.clear();
         return new EmptyResult();
     }
 
@@ -143,7 +154,7 @@ public class Service {
         // we're still getting 401s thrown more often than they should be
         if (authToken == null){
             throw new BadRequest400Exception("");
-        } if (!memAuth.containsAuth(authToken)){
+        } if (!authDatabase.containsAuth(authToken)){
             throw new Unauthorized401Exception("");
         } return true;
     }
