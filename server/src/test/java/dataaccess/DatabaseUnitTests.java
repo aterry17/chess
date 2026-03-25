@@ -104,9 +104,39 @@ public class DatabaseUnitTests {
         }
     }
     @Test
-    public void correctPasswordPositiveTest(){}
+    public void correctPasswordPositiveTest(){
+        try {
+            var sqlDataBase = new SqlUserDAO();
+            sqlDataBase.clear();
+            var user1 = new UserData("user1", "pass1", "email1");
+            var user2 = new UserData("user2", "pass2", "email2");
+            sqlDataBase.createUser(user1);
+            sqlDataBase.createUser(user2);
+            assertTrue(sqlDataBase.correctPassword("user1", "pass1"));
+            assertTrue(sqlDataBase.correctPassword("user2", "pass2"));
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
+    }
     @Test
-    public void correctPasswordNegativeTest(){}
+    public void correctPasswordNegativeTest(){
+        try {
+            var sqlDataBase = new SqlUserDAO();
+            sqlDataBase.clear();
+            var user1 = new UserData("user1", "pass1", "email1");
+            var user2 = new UserData("user2", "pass2", "email2");
+            sqlDataBase.createUser(user1);
+            sqlDataBase.createUser(user2);
+            assertFalse(sqlDataBase.correctPassword("user1", "badPass"));
+            assertThrows(Exception.class, () -> {
+                sqlDataBase.correctPassword(null, null);
+            });
+
+        } catch (DataAccessException e){
+            fail("threw an unexpected DataAccessException");
+        }
+    }
 
 
 
