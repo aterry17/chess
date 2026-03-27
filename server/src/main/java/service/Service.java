@@ -11,26 +11,16 @@ import java.util.UUID;
 
 public class Service {
 
-    /// Memory Databases
-    private final MemUserDAO userDatabase;
-    private final MemAuthDAO authDatabase;
-    private final MemGameDAO gameDatabase;
+    private final UserDAO userDatabase;
+    private final AuthDAO authDatabase;
+    private final GameDAO gameDatabase;
 
-    /// SQL Databases
-//    private final SqlUserDAO userDatabase;
-//    private final SqlAuthDAO authDatabase;
-//    private final SqlGameDAO gameDatabase;
 
-    ///  Memory Service
-    public Service(MemUserDAO userDatabase, MemAuthDAO authDatabase, MemGameDAO gameDatabase) {
-
-    /// SQL Service
-//    public Service(SqlUserDAO userDatabase, SqlAuthDAO authDatabase, SqlGameDAO gameDatabase) {
+    public Service(UserDAO userDatabase, AuthDAO authDatabase, GameDAO gameDatabase) {
         this.userDatabase = userDatabase;
         this.authDatabase= authDatabase;
         this.gameDatabase = gameDatabase;
     }
-//    private MemUserDAO mem = new MemUserDAO();
 
     private static String generateToken() {
         return UUID.randomUUID().toString();
@@ -139,7 +129,7 @@ public class Service {
         }
     }
 
-    public EmptyResult clear(){
+    public EmptyResult clear() throws DataAccessException{
         gameDatabase.clear();
         authDatabase.clear();
         userDatabase.clear();

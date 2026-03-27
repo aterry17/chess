@@ -7,16 +7,31 @@ import io.javalin.http.Context;
 import service.Service;
 import java.util.Map;
 
-public class Server {
+public class Server{
 
     private final Javalin javalin;
-    private final Service service = new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO());
-    // if we change the above line to use the SQL DAOs will everything still work fine?
-
-//    private final Service service = new Service(new SqlUserDAO(), new SqlAuthDAO(), new SqlGameDAO());
+    private final Service service;
 
 
-    public Server() {
+//    public Server() {
+//
+//        try{
+//            service = new Service(new SqlUserDAO(), new SqlAuthDAO(), new SqlGameDAO());
+//        } catch (DataAccessException ex) {
+//            throw new RuntimeException("Server threw an unexpected DataAccessException");
+//        }
+////        this(new Service(new MemUserDAO(), new MemAuthDAO(), new MemGameDAO()));
+//
+//    }
+
+    public Server(){
+
+        try{
+            service = new Service(new SqlUserDAO(), new SqlAuthDAO(), new SqlGameDAO());
+        } catch (DataAccessException ex) {
+            throw new RuntimeException("Server threw an unexpected DataAccessException");
+        }
+//        this.service = service;
 
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
 

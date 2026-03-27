@@ -165,6 +165,9 @@ public class SqlUserDAO implements UserDAO{
         } catch (SQLException ex) {
             throw new ResponseException(ResponseException.Code.ServerError, String.format("Unable to configure database: %s", ex.getMessage()));
         }
+//        catch (DataAccessException ex) {
+//            throw new ResponseException(ResponseException.Code.ServerError, String.format("configureDatabase threw unexpected DataAccessException"));
+//        }
     }
 
 
